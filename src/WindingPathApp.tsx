@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { AlertCircle } from 'lucide-react';
+import { getWeekComponent, calculateCurrentWeek, clearWeekResponses } from './weekLoader';
 
 // ============================================================================
 // SUPABASE CONFIGURATION
@@ -1741,6 +1742,7 @@ const WindingPathApp = () => {
 
   // Program Data
   const [currentWeek, setCurrentWeek] = useState(1);
+  const [lastWeekViewed, setLastWeekViewed] = useState(1); // Track week transitions
   const [selectedPath, setSelectedPath] = useState({});
   const [journalEntries, setJournalEntries] = useState({});
   const [pageEntry, setPageEntry] = useState('');
@@ -2283,6 +2285,17 @@ const WindingPathApp = () => {
     }
   };
 
+  const storageDel = async (key) => {
+    try {
+      if (window.storage) {
+        await window.storage.delete(key);
+        console.log(`🗑️ Deleted: ${key}`);
+      }
+    } catch (error) {
+      console.error('Error deleting from storage:', error);
+    }
+  };
+
   // Compute current week from start date
   const computeWeekFromStart = (startDateStr) => {
     if (!startDateStr) return 1;
@@ -2338,7 +2351,10 @@ const WindingPathApp = () => {
         start = todayStr;
       }
 
-      setCurrentWeek(computeWeekFromStart(start));
+      // Use the new calculateCurrentWeek from weekLoader
+      const calculatedWeek = calculateCurrentWeek(start);
+      setCurrentWeek(calculatedWeek);
+      setLastWeekViewed(calculatedWeek);
       setDevStartDate(start);
 
       // Load landscape responses
@@ -2426,6 +2442,19 @@ const WindingPathApp = () => {
       }
     })();
   }, []);
+
+  // Monitor week transitions and handle state resets
+  useEffect(() => {
+    if (currentWeek !== lastWeekViewed) {
+      console.log(`📅 Week transition: ${lastWeekViewed} → ${currentWeek}`);
+      
+      // Reset daily progress for new week
+      setJournalEntries({});
+      setPageEntry('');
+      
+      setLastWeekViewed(currentWeek);
+    }
+  }, [currentWeek, lastWeekViewed]);
 
   // Autosave page entry with debounce - also saves to archive
   useEffect(() => {
@@ -2714,19 +2743,33 @@ const WindingPathApp = () => {
   };
 
   const handleRestartWeek = async () => {
-    const confirmed = window.confirm('Reset progress for the current week?');
+    const confirmed = window.confirm(
+      `Reset progress for week ${currentWeek}? This will clear all prompt responses for this week.`
+    );
     if (!confirmed) return;
-    
-    const newJournalEntries = { ...journalEntries };
-    for (let day = 1; day <= 7; day++) {
-      const key = getDayKey(currentWeek, day);
-      if (newJournalEntries[key]) {
-        delete newJournalEntries[key];
+
+    try {
+      // Clear week-specific prompt responses
+      if (currentWeek > 1) {
+        await clearWeekResponses(currentWeek, storageDel);
       }
+
+      // Clear daily journal entries for this week
+      const newJournalEntries = { ...journalEntries };
+      for (let day = 1; day <= 7; day++) {
+        const key = getDayKey(currentWeek, day);
+        if (newJournalEntries[key]) {
+          delete newJournalEntries[key];
+        }
+      }
+      setJournalEntries(newJournalEntries);
+      await storageSet('windingPath:journalEntries', newJournalEntries);
+
+      alert(`✅ Week ${currentWeek} has been reset. You can start fresh!`);
+    } catch (error) {
+      console.error('❌ Error restarting week:', error);
+      alert('Failed to reset week. Please try again.');
     }
-    setJournalEntries(newJournalEntries);
-    await storageSet('windingPath:journalEntries', newJournalEntries);
-    alert('Current week has been reset.');
   };
 
   const handleRestartProgram = async () => {
@@ -3763,13 +3806,31 @@ const WindingPathApp = () => {
                 </div>
               )}
 
-              {/* Weekly Prompts */}
-              <WeeklyPrompts 
-                currentWeek={currentWeek} 
-                storageSet={storageSet}
-                checkInDay={checkInDay}
-                userEmail={userEmail}
-              />
+              {/* Weekly Prompts - Dynamic Week Loading */}
+              {(() => {
+                const WeekComponent = getWeekComponent(currentWeek);
+                
+                if (WeekComponent) {
+                  // Week 2-12: Load the week-specific component
+                  return (
+                    <WeekComponent 
+                      archiveData={archiveData}
+                      setArchiveData={setArchiveData}
+                      storageSet={storageSet}
+                    />
+                  );
+                } else {
+                  // Week 1: Use the hardcoded WeeklyPrompts
+                  return (
+                    <WeeklyPrompts 
+                      currentWeek={currentWeek}
+                      storageSet={storageSet}
+                      checkInDay={checkInDay}
+                      userEmail={userEmail}
+                    />
+                  );
+                }
+              })()}
             </div>
           )}
 
