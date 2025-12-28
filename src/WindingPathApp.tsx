@@ -2326,15 +2326,36 @@ const WindingPathApp = () => {
       const savedUserName = await storageGet('windingPath:userName');
       const savedSignature = await storageGet('windingPath:userSignature');
       const savedCheckInDay = await storageGet('windingPath:checkInDay');
+      const savedEmail = await storageGet('windingPath:userEmail');
+      const savedEmailOptIn = await storageGet('windingPath:emailOptIn');
+      const savedEmailRemindersEnabled = await storageGet('windingPath:emailRemindersEnabled');
+      const savedDailyReminders = await storageGet('windingPath:dailyReminders');
+      const savedWeeklyGreetings = await storageGet('windingPath:weeklyGreetings');
+      const savedCheckInReminders = await storageGet('windingPath:checkInReminders');
+      const savedDelayFirstCheckIn = await storageGet('windingPath:delayFirstCheckIn');
       
-      if (savedUserName) {
-        setUserName(savedUserName);
+      // Set all user data from cache
+      if (savedUserName) setUserName(savedUserName);
+      if (savedSignature) setUserSignature(savedSignature);
+      if (savedCheckInDay) setCheckInDay(savedCheckInDay);
+      if (savedEmail) {
+        setUserEmail(savedEmail);
+        setEmailOptIn(savedEmailOptIn !== false); // Default to true if not set
       }
-      if (savedSignature) {
-        setUserSignature(savedSignature);
+      if (savedEmailRemindersEnabled !== null && savedEmailRemindersEnabled !== undefined) {
+        setEmailRemindersEnabled(savedEmailRemindersEnabled);
       }
-      if (savedCheckInDay) {
-        setCheckInDay(savedCheckInDay);
+      if (savedDailyReminders !== null && savedDailyReminders !== undefined) {
+        setDailyReminders(savedDailyReminders);
+      }
+      if (savedWeeklyGreetings !== null && savedWeeklyGreetings !== undefined) {
+        setWeeklyGreetings(savedWeeklyGreetings);
+      }
+      if (savedCheckInReminders !== null && savedCheckInReminders !== undefined) {
+        setCheckInReminders(savedCheckInReminders);
+      }
+      if (savedDelayFirstCheckIn !== null && savedDelayFirstCheckIn !== undefined) {
+        setDelayFirstCheckIn(savedDelayFirstCheckIn);
       }
 
       // If user hasn't completed full onboarding, show splash
@@ -2370,11 +2391,7 @@ const WindingPathApp = () => {
         setPageEntry(savedPageEntry);
       }
 
-      // Load email settings
-      const savedEmail = await storageGet('windingPath:userEmail');
-      if (savedEmail) {
-        setUserEmail(savedEmail);
-        setEmailOptIn(true);
+      // Email settings already loaded above in the preference loading section
         
         // Initialize Supabase user if email exists and onboarding complete
         if (savedUserName && savedSignature && savedCheckInDay && supabaseRef.current) {
@@ -2559,6 +2576,7 @@ const WindingPathApp = () => {
   const handleContractComplete = async () => {
     if (userSignature) {
       await storageSet('windingPath:userSignature', userSignature);
+      await storageSet('windingPath:emailOptIn', emailOptIn);
       if (emailOptIn && userEmail.trim()) {
         await storageSet('windingPath:userEmail', userEmail.trim());
       }
@@ -3145,7 +3163,9 @@ const WindingPathApp = () => {
                   type="checkbox"
                   checked={!emailOptIn}
                   onChange={(e) => {
-                    setEmailOptIn(!e.target.checked);
+                    const newOptInValue = !e.target.checked;
+                    setEmailOptIn(newOptInValue);
+                    storageSet('windingPath:emailOptIn', newOptInValue);
                     if (e.target.checked) {
                       setUserEmail('');
                     }
