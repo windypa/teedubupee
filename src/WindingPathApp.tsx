@@ -15,7 +15,7 @@ const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBh
  * ============================================================================
  * SUPABASE DATABASE SCHEMA
  * ============================================================================
- * 
+ *
  * Table: users
  * - id: uuid (primary key, auto-generated)
  * - email: text (unique, not null)
@@ -25,7 +25,7 @@ const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBh
  * - start_date: date
  * - created_at: timestamp with time zone (default now())
  * - updated_at: timestamp with time zone (default now())
- * 
+ *
  * Table: page_entries
  * - id: uuid (primary key, auto-generated)
  * - user_id: uuid (foreign key to users.id)
@@ -34,7 +34,7 @@ const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBh
  * - week: integer
  * - entry_date: date
  * - created_at: timestamp with time zone (default now())
- * 
+ *
  * Table: landscape_responses
  * - id: uuid (primary key, auto-generated)
  * - user_id: uuid (foreign key to users.id)
@@ -42,20 +42,20 @@ const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBh
  * - response: text
  * - week: integer
  * - created_at: timestamp with time zone (default now())
- * 
+ *
  * Table: check_in_responses
  * - id: uuid (primary key, auto-generated)
  * - user_id: uuid (foreign key to users.id)
  * - responses: jsonb
  * - check_in_date: date
  * - created_at: timestamp with time zone (default now())
- * 
+ *
  * Table: collages
  * - id: uuid (primary key, auto-generated)
  * - user_id: uuid (foreign key to users.id)
  * - collage_data: jsonb
  * - created_at: timestamp with time zone (default now())
- * 
+ *
  * Table: email_events
  * - id: uuid (primary key, auto-generated)
  * - user_id: uuid (foreign key to users.id)
@@ -64,7 +64,7 @@ const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBh
  * - sent_at: timestamp with time zone
  * - status: text (e.g., 'pending', 'sent', 'failed')
  * - created_at: timestamp with time zone (default now())
- * 
+ *
  * ============================================================================
  */
 
@@ -72,26 +72,26 @@ const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBh
  * ============================================================================
  * STYLING REFERENCE - DO NOT MODIFY THESE VALUES
  * ============================================================================
- * 
+ *
  * GLOBAL LAYOUT:
  * - Main container: min-h-screen bg-white flex
  * - Sidebar: w-48, p-6, border-r
  * - Main content: flex-1, p-12, marginLeft: 3rem, marginRight: 3rem
- * 
+ *
  * TYPOGRAPHY:
  * - Font family: 'Helvetica, Arial, sans-serif'
  * - Primary color: #030f42
  * - Headers: text-4xl, fontWeight: normal
  * - Body text: fontSize 13-15px
  * - Small text: fontSize 10-12px
- * 
+ *
  * SPACING PATTERNS:
  * - Section margins: mb-8, mb-12
  * - Inner padding: p-6, p-8, p-12
  * - Element gaps: gap-2, gap-6, gap-8
  * - Button padding: px-3 py-2, px-4 py-3
  * - List spacing: space-y-3, space-y-4, space-y-6
- * 
+ *
  * COMPONENT-SPECIFIC:
  * - Archive toggle: mb-8 p-6 border
  * - Calendar grid: gap-1
@@ -99,11 +99,11 @@ const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBh
  * - Weekly prompts container: padding: 24px
  * - Progress indicator: mb-12 p-8 border
  * - Check-in section: mt-8 p-8 border
- * 
+ *
  * BORDERS:
  * - Standard: border, borderColor: #030f42
  * - Light borders: borderColor: #e5e7eb
- * 
+ *
  * ============================================================================
  */
 
@@ -187,7 +187,7 @@ const ClocktowerArchive = ({ archiveData = {} }) => {
 
   return (
     <div>
-      <h1 
+      <h1
         className="text-4xl mb-2"
         style={{ fontFamily: 'Helvetica, Arial, sans-serif', color: '#030f42', fontWeight: 'normal' }}
       >
@@ -208,7 +208,7 @@ const ClocktowerArchive = ({ archiveData = {} }) => {
           <button
             onClick={() => setShowArchive(!showArchive)}
             className={`relative inline-flex h-6 w-11 items-center rounded-full transition-all`}
-            style={{ 
+            style={{
               backgroundColor: showArchive ? '#030f42' : '#d1d5db',
             }}
           >
@@ -437,9 +437,9 @@ const ClocktowerArchive = ({ archiveData = {} }) => {
                     <h4 style={{ fontFamily: 'Helvetica, Arial, sans-serif', color: '#030f42', fontSize: '14px', fontWeight: 'bold', marginBottom: '16px' }}>
                       Collage Gallery ({selectedArchive.collages.length})
                     </h4>
-                    
+
                     {/* Slide Gallery */}
-                    <div style={{ 
+                    <div style={{
                       border: `2px solid #030f42`,
                       backgroundColor: '#f8f9fa',
                       padding: '16px',
@@ -479,13 +479,13 @@ const ClocktowerArchive = ({ archiveData = {} }) => {
 
                           // Calculate bounding box of all items
                           let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
-                          
+
                           currentCollage.items.forEach(item => {
                             const x1 = item.x;
                             const y1 = item.y;
                             const x2 = item.x + item.width;
                             const y2 = item.y + item.height;
-                            
+
                             minX = Math.min(minX, x1);
                             maxX = Math.max(maxX, x2);
                             minY = Math.min(minY, y1);
@@ -521,8 +521,8 @@ const ClocktowerArchive = ({ archiveData = {} }) => {
                                   }}
                                 >
                                   <img
-                                    src={item.src}
-                                    alt="collage item"
+                                    src={/untitled folder/Julia.src}
+                                    alt=""
                                     style={{
                                       width: '100%',
                                       height: '100%',
@@ -570,7 +570,7 @@ const ClocktowerArchive = ({ archiveData = {} }) => {
                         >
                           ← Previous
                         </button>
-                        
+
                         <div style={{
                           flex: 1,
                           textAlign: 'center',
@@ -598,9 +598,9 @@ const ClocktowerArchive = ({ archiveData = {} }) => {
                       </div>
 
                       {/* Thumbnail strip */}
-                      <div style={{ 
-                        display: 'flex', 
-                        gap: '8px', 
+                      <div style={{
+                        display: 'flex',
+                        gap: '8px',
                         marginTop: '12px',
                         overflowX: 'auto',
                         paddingBottom: '4px'
@@ -682,12 +682,12 @@ const CollageEditor = ({ storageSet, archiveData, setArchiveData }) => {
       items: items,
       timestamp: new Date().toISOString(),
     };
-    
+
     try {
       // Save to local storage using the storageSet function passed as prop
       await storageSet('windingPath:collage:current', collageData);
       console.log('Collage saved to local storage:', collageData.title);
-      
+
       // Also add to archiveData state so it appears immediately in clocktower
       const today = new Date().toISOString().split('T')[0];
       const newArchiveData = { ...archiveData };
@@ -697,7 +697,7 @@ const CollageEditor = ({ storageSet, archiveData, setArchiveData }) => {
       if (!newArchiveData[today].collages) {
         newArchiveData[today].collages = [];
       }
-      
+
       // Check if collage with same title already exists for today
       const existingIndex = newArchiveData[today].collages.findIndex(c => c.title === collageData.title);
       if (existingIndex >= 0) {
@@ -715,10 +715,10 @@ const CollageEditor = ({ storageSet, archiveData, setArchiveData }) => {
           items: items, // Store full composition data for display
         });
       }
-      
+
       setArchiveData(newArchiveData);
       console.log('Collage added to archive state for date:', today);
-      
+
       setSaveStatus('saved');
       setTimeout(() => {
         alert('Collage saved successfully!');
@@ -736,7 +736,7 @@ const CollageEditor = ({ storageSet, archiveData, setArchiveData }) => {
     try {
       // Calculate bounding box
       let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
-      
+
       if (items.length === 0) {
         alert('No items to export');
         return;
@@ -758,7 +758,7 @@ const CollageEditor = ({ storageSet, archiveData, setArchiveData }) => {
       canvas.width = canvasWidth;
       canvas.height = canvasHeight;
       const ctx = canvas.getContext('2d');
-      
+
       if (!ctx) {
         alert('Could not get canvas context');
         return;
@@ -775,10 +775,10 @@ const CollageEditor = ({ storageSet, archiveData, setArchiveData }) => {
       items.forEach((item, index) => {
         const img = new Image();
         img.crossOrigin = 'anonymous';
-        
+
         img.onload = () => {
           loadedCount++;
-          
+
           const x = item.x - minX + padding;
           const y = item.y - minY + padding;
 
@@ -807,7 +807,7 @@ const CollageEditor = ({ storageSet, archiveData, setArchiveData }) => {
         img.onerror = () => {
           console.error('Failed to load image:', item.src);
           loadedCount++;
-          
+
           // Continue anyway with remaining images
           if (loadedCount === totalItems) {
             canvas.toBlob((blob) => {
@@ -843,7 +843,7 @@ const CollageEditor = ({ storageSet, archiveData, setArchiveData }) => {
           const aspectRatio = img.width / img.height;
           const baseWidth = 200;
           const baseHeight = baseWidth / aspectRatio;
-          
+
           const newItem = {
             id: Date.now(),
             src: event.target.result,
@@ -872,7 +872,7 @@ const CollageEditor = ({ storageSet, archiveData, setArchiveData }) => {
     try {
       const img = new Image();
       img.crossOrigin = 'anonymous';
-      
+
       img.onload = () => {
         const aspectRatio = img.width / img.height;
         const baseWidth = 200;
@@ -998,7 +998,7 @@ const CollageEditor = ({ storageSet, archiveData, setArchiveData }) => {
     const ctx = canvas.getContext('2d');
     const img = new Image();
     img.crossOrigin = 'anonymous';
-    
+
     img.onload = () => {
       canvas.width = img.width;
       canvas.height = img.height;
@@ -1043,7 +1043,7 @@ const CollageEditor = ({ storageSet, archiveData, setArchiveData }) => {
 
   return (
     <div>
-      <h1 
+      <h1
         className="text-4xl mb-2"
         style={{ fontFamily: 'Helvetica, Arial, sans-serif', color: '#030f42', fontWeight: 'normal' }}
       >
@@ -1212,7 +1212,7 @@ const CollageEditor = ({ storageSet, archiveData, setArchiveData }) => {
               >
                 <img
                   src={item.src}
-                  alt="collage item"
+                  alt=""
                   className="w-full h-full object-cover pointer-events-none select-none"
                   draggable={false}
                 />
@@ -1281,7 +1281,7 @@ const CollageEditor = ({ storageSet, archiveData, setArchiveData }) => {
               <p className="text-sm font-semibold mb-4" style={{ fontFamily: 'Helvetica, Arial, sans-serif', color: '#030f42' }}>
                 Image Library
               </p>
-              
+
               {/* Upload from File */}
               <button
                 onClick={() => fileInputRef.current?.click()}
@@ -1492,15 +1492,15 @@ const WeeklyPrompts = ({ currentWeek, storageSet, checkInDay, userEmail }) => {
       ...promptResponses,
       [promptNumber]: response,
     });
-    
+
     // Save to storage
     await storageSet(`windingPath:weeklyPrompt:w${currentWeek}-p${promptNumber}`, response);
-    
+
     // If this is a mailable prompt (5), schedule it to send in 3 days
     if (promptNumber === 5 && userEmail) {
       const sendDate = new Date();
       sendDate.setDate(sendDate.getDate() + 3);
-      
+
       await storageSet(`windingPath:mailablePrompt:w${currentWeek}-p${promptNumber}`, {
         ...response,
         sendOn: sendDate.toISOString().split('T')[0],
@@ -1508,7 +1508,7 @@ const WeeklyPrompts = ({ currentWeek, storageSet, checkInDay, userEmail }) => {
         scheduledSend: true,
       });
     }
-    
+
     setExpandedPrompt(null);
   };
 
@@ -1731,7 +1731,7 @@ const WindingPathApp = () => {
   });
   const [landscapeDragStart, setLandscapeDragStart] = useState({ x: 0, y: 0 });
   const landscapeRef = useRef(null);
-  
+
   // Landscape interactive responses (for prompts with input fields)
   const [landscapeResponses, setLandscapeResponses] = useState({
     synchronicity1: '',
@@ -1888,7 +1888,7 @@ const WindingPathApp = () => {
   useEffect(() => {
     const randomIndex1 = Math.floor(Math.random() * splashQuotes.length);
     setSplashQuote(splashQuotes[randomIndex1]);
-    
+
     // Different quote for dashboard
     let randomIndex2 = Math.floor(Math.random() * splashQuotes.length);
     while (randomIndex2 === randomIndex1 && splashQuotes.length > 1) {
@@ -1916,7 +1916,7 @@ const WindingPathApp = () => {
   // Upload signature to Supabase Storage and return public URL
   const uploadSignatureToStorage = async (signatureDataUrl, userEmail) => {
     if (!supabaseRef.current || !signatureDataUrl) return null;
-    
+
     try {
       // Convert base64 data URL to blob
       const base64Data = signatureDataUrl.split(',')[1];
@@ -1927,10 +1927,10 @@ const WindingPathApp = () => {
       }
       const byteArray = new Uint8Array(byteNumbers);
       const blob = new Blob([byteArray], { type: 'image/png' });
-      
+
       // Create unique filename
       const fileName = `signatures/${userEmail.replace(/[^a-zA-Z0-9]/g, '_')}_${Date.now()}.png`;
-      
+
       // Upload to Supabase Storage
       const { data, error } = await supabaseRef.current.storage
         .from('user-files')
@@ -1938,17 +1938,17 @@ const WindingPathApp = () => {
           contentType: 'image/png',
           upsert: true
         });
-      
+
       if (error) {
         console.error('Error uploading signature:', error);
         return null;
       }
-      
+
       // Get public URL
       const { data: urlData } = supabaseRef.current.storage
         .from('user-files')
         .getPublicUrl(fileName);
-      
+
       return urlData?.publicUrl || null;
     } catch (err) {
       console.error('Signature upload error:', err);
@@ -1959,7 +1959,7 @@ const WindingPathApp = () => {
   // Get or create user by email
   const getOrCreateSupabaseUser = async (email, name, signature, checkInDayValue, startDate) => {
     if (!supabaseRef.current || !email) return null;
-    
+
     try {
       // Upload signature to storage and get URL
       let signatureUrl = signature;
@@ -1969,14 +1969,14 @@ const WindingPathApp = () => {
           signatureUrl = uploadedUrl;
         }
       }
-      
+
       // First, try to find existing user
       const { data: existingUser, error: findError } = await supabaseRef.current
         .from('users')
         .select('*')
         .eq('email', email)
         .single();
-      
+
       if (existingUser) {
         // Update user data if it changed
         const { data: updatedUser, error: updateError } = await supabaseRef.current
@@ -1991,10 +1991,10 @@ const WindingPathApp = () => {
           .eq('id', existingUser.id)
           .select()
           .single();
-        
+
         return updatedUser || existingUser;
       }
-      
+
       // Create new user
       const { data: newUser, error: createError } = await supabaseRef.current
         .from('users')
@@ -2007,12 +2007,12 @@ const WindingPathApp = () => {
         })
         .select()
         .single();
-      
+
       if (createError) {
         console.error('Error creating user:', createError);
         return null;
       }
-      
+
       return newUser;
     } catch (err) {
       console.error('Supabase user error:', err);
@@ -2023,11 +2023,11 @@ const WindingPathApp = () => {
   // Save page entry to Supabase
   const savePageEntryToSupabase = async (content) => {
     if (!supabaseRef.current || !supabaseUserId || !content?.trim()) return;
-    
+
     try {
       const today = new Date().toISOString().split('T')[0];
       const wordCount = content.split(/\s+/).filter(w => w.length > 0).length;
-      
+
       // Upsert - update if exists for today, insert if not
       const { data, error } = await supabaseRef.current
         .from('page_entries')
@@ -2040,7 +2040,7 @@ const WindingPathApp = () => {
         }, {
           onConflict: 'user_id,entry_date'
         });
-      
+
       if (error) {
         console.error('Error saving page entry:', error);
       }
@@ -2052,7 +2052,7 @@ const WindingPathApp = () => {
   // Save landscape response to Supabase
   const saveLandscapeResponseToSupabase = async (promptKey, response) => {
     if (!supabaseRef.current || !supabaseUserId || !response?.trim()) return;
-    
+
     try {
       const { data, error } = await supabaseRef.current
         .from('landscape_responses')
@@ -2064,7 +2064,7 @@ const WindingPathApp = () => {
         }, {
           onConflict: 'user_id,prompt_key'
         });
-      
+
       if (error) {
         console.error('Error saving landscape response:', error);
       }
@@ -2076,10 +2076,10 @@ const WindingPathApp = () => {
   // Save check-in responses to Supabase
   const saveCheckInToSupabase = async (responses) => {
     if (!supabaseRef.current || !supabaseUserId) return;
-    
+
     try {
       const today = new Date().toISOString().split('T')[0];
-      
+
       const { data, error } = await supabaseRef.current
         .from('check_in_responses')
         .upsert({
@@ -2089,7 +2089,7 @@ const WindingPathApp = () => {
         }, {
           onConflict: 'user_id,check_in_date'
         });
-      
+
       if (error) {
         console.error('Error saving check-in:', error);
       }
@@ -2101,7 +2101,7 @@ const WindingPathApp = () => {
   // Save collage to Supabase
   const saveCollageToSupabase = async (collageData) => {
     if (!supabaseRef.current || !supabaseUserId) return;
-    
+
     try {
       const { data, error } = await supabaseRef.current
         .from('collages')
@@ -2109,7 +2109,7 @@ const WindingPathApp = () => {
           user_id: supabaseUserId,
           collage_data: collageData
         });
-      
+
       if (error) {
         console.error('Error saving collage:', error);
       }
@@ -2121,7 +2121,7 @@ const WindingPathApp = () => {
   // Schedule email event
   const scheduleEmailEvent = async (eventType, scheduledFor) => {
     if (!supabaseRef.current || !supabaseUserId) return;
-    
+
     try {
       const { data, error } = await supabaseRef.current
         .from('email_events')
@@ -2131,7 +2131,7 @@ const WindingPathApp = () => {
           scheduled_for: scheduledFor,
           status: 'pending'
         });
-      
+
       if (error) {
         console.error('Error scheduling email:', error);
       }
@@ -2144,7 +2144,7 @@ const WindingPathApp = () => {
   // Update email preferences and schedule events
   const updateEmailPreferences = async (preferences) => {
     if (!supabaseRef.current || !supabaseUserId) return;
-    
+
     try {
       // Update user preferences
       const { error: updateError } = await supabaseRef.current
@@ -2154,7 +2154,7 @@ const WindingPathApp = () => {
           updated_at: new Date().toISOString()
         })
         .eq('id', supabaseUserId);
-      
+
       if (updateError) {
         console.error('Error updating email preferences:', updateError);
         return;
@@ -2170,7 +2170,7 @@ const WindingPathApp = () => {
       } else {
         // Schedule next events based on preferences
         const now = new Date();
-        
+
         if (preferences.dailyReminders) {
           // Schedule next morning reminder (6am next day)
           const tomorrow = new Date(now);
@@ -2178,7 +2178,7 @@ const WindingPathApp = () => {
           tomorrow.setHours(6, 0, 0, 0);
           await scheduleEmailEvent('daily_reminder', tomorrow.toISOString());
         }
-        
+
         if (preferences.weeklyGreetings) {
           // Schedule weekly greeting for Monday 9am
           const nextMonday = new Date(now);
@@ -2186,7 +2186,7 @@ const WindingPathApp = () => {
           nextMonday.setHours(9, 0, 0, 0);
           await scheduleEmailEvent('weekly_greeting', nextMonday.toISOString());
         }
-        
+
         if (preferences.checkInReminders && checkInDay) {
           // Schedule check-in reminder for check-in day morning
           const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
@@ -2206,7 +2206,7 @@ const WindingPathApp = () => {
   // Load user data from Supabase
   const loadUserDataFromSupabase = async (email) => {
     if (!supabaseRef.current || !email) return null;
-    
+
     try {
       const { data: user, error } = await supabaseRef.current
         .from('users')
@@ -2219,9 +2219,9 @@ const WindingPathApp = () => {
         `)
         .eq('email', email)
         .single();
-      
+
       if (error || !user) return null;
-      
+
       return user;
     } catch (err) {
       console.error('Error loading user data:', err);
@@ -2236,12 +2236,12 @@ const WindingPathApp = () => {
   // Helper function to check if today is check-in day
   const isCheckInDay = () => {
     if (!checkInDay) return false;
-    
+
     // If first check-in is delayed (user selected today during onboarding), don't show it
     if (delayFirstCheckIn && currentWeek === 1) {
       return false;
     }
-    
+
     // If it's the user's first day with the service, delay check-in until next week
     const startDateStr = devStartDate;
     if (startDateStr) {
@@ -2249,13 +2249,13 @@ const WindingPathApp = () => {
       const today = new Date();
       const todayDateStr = today.toISOString().split('T')[0];
       const startDateOnlyStr = startDate.toISOString().split('T')[0];
-      
+
       // If today is the start date, skip check-in
       if (todayDateStr === startDateOnlyStr) {
         return false;
       }
     }
-    
+
     const today = new Date();
     const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
     const todayName = daysOfWeek[today.getDay()];
@@ -2333,7 +2333,7 @@ const WindingPathApp = () => {
       const savedWeeklyGreetings = await storageGet('windingPath:weeklyGreetings');
       const savedCheckInReminders = await storageGet('windingPath:checkInReminders');
       const savedDelayFirstCheckIn = await storageGet('windingPath:delayFirstCheckIn');
-      
+
       // Set all user data from cache
       if (savedUserName) setUserName(savedUserName);
       if (savedSignature) setUserSignature(savedSignature);
@@ -2392,7 +2392,7 @@ const WindingPathApp = () => {
       }
 
       // Email settings already loaded above in the preference loading section
-        
+
         // Initialize Supabase user if email exists and onboarding complete
         if (savedUserName && savedSignature && savedCheckInDay && supabaseRef.current) {
           const user = await getOrCreateSupabaseUser(
@@ -2464,11 +2464,11 @@ const WindingPathApp = () => {
   useEffect(() => {
     if (currentWeek !== lastWeekViewed) {
       console.log(`📅 Week transition: ${lastWeekViewed} → ${currentWeek}`);
-      
+
       // Reset daily progress for new week
       setJournalEntries({});
       setPageEntry('');
-      
+
       setLastWeekViewed(currentWeek);
     }
   }, [currentWeek, lastWeekViewed]);
@@ -2480,13 +2480,13 @@ const WindingPathApp = () => {
     const timer = setTimeout(async () => {
       try {
         setSaveStatus('saving');
-        
+
         const today = new Date().toISOString().split('T')[0];
-        
+
         // Try to save page entry for today
         try {
           await storageSet(`windingPath:pageEntry:${today}`, pageEntry);
-          
+
           // Also save to date-specific archive key if there's content
           if (pageEntry && pageEntry.trim()) {
             await storageSet(`windingPath:archive:page:${today}`, {
@@ -2494,7 +2494,7 @@ const WindingPathApp = () => {
               savedAt: new Date().toISOString(),
               week: currentWeek
             });
-            
+
             // Update archiveData state for immediate display in clocktower
             setArchiveData(prev => ({
               ...prev,
@@ -2510,9 +2510,9 @@ const WindingPathApp = () => {
         } catch (e) {
           console.warn('Could not save page entry:', e);
         }
-        
+
         await savePageEntryToSupabase(pageEntry);
-        
+
         setSaveStatus('saved');
         setLastSaveTime(new Date());
       } catch (err) {
@@ -2532,14 +2532,14 @@ const WindingPathApp = () => {
     const timer = setTimeout(async () => {
       try {
         const today = new Date().toISOString().split('T')[0];
-        
+
         // Save landscape responses to date-specific archive key
         await storageSet(`windingPath:archive:landscape:${today}`, {
           responses: landscapeResponses,
           savedAt: new Date().toISOString(),
           week: currentWeek
         });
-        
+
         // Update archiveData state for immediate display in clocktower
         setArchiveData(prev => ({
           ...prev,
@@ -2589,20 +2589,20 @@ const WindingPathApp = () => {
     const today = new Date();
     const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
     const todayName = daysOfWeek[today.getDay()];
-    
+
     // If the selected day is today, we'll store a flag to delay the first check-in
     let delayedFirstCheckIn = false;
     if (todayName === day) {
       delayedFirstCheckIn = true;
       alert(`You've selected ${day}, which is today. Your first check-in will be ${day} of next week.`);
     }
-    
+
     setCheckInDay(day);
     await storageSet('windingPath:checkInDay', day);
     if (delayedFirstCheckIn) {
       await storageSet('windingPath:delayFirstCheckIn', true);
     }
-    
+
     // Create/update Supabase user if email was provided
     if (emailOptIn && userEmail.trim() && supabaseRef.current) {
       const startDate = await storageGet('windingPath:startDate') || new Date().toISOString().split('T')[0];
@@ -2616,7 +2616,7 @@ const WindingPathApp = () => {
       if (user) {
         setSupabaseUserId(user.id);
         console.log('Supabase user created:', user.id);
-        
+
         // Schedule initial email events if reminders are enabled
         if (emailRemindersEnabled) {
           await updateEmailPreferences({
@@ -2628,7 +2628,7 @@ const WindingPathApp = () => {
         }
       }
     }
-    
+
     setAppState('onboarding-welcome');
   };
 
@@ -2835,10 +2835,10 @@ const WindingPathApp = () => {
 
   const handleFullReset = async () => {
     console.log('handleFullReset called');
-    
+
     // Close modal first
     setShowResetConfirm(false);
-    
+
     // Clear all persistent storage
     try {
       if (window.storage) {
@@ -2850,7 +2850,7 @@ const WindingPathApp = () => {
             console.log('Deleted:', key);
           }
         }
-        
+
         // Also clear any collage keys
         const collageKeys = await window.storage.list('windingPath:collage:');
         if (collageKeys && collageKeys.keys) {
@@ -2859,7 +2859,7 @@ const WindingPathApp = () => {
             console.log('Deleted collage:', key);
           }
         }
-        
+
         // Clear archive keys
         const archiveKeys = await window.storage.list('windingPath:archive:');
         if (archiveKeys && archiveKeys.keys) {
@@ -2868,7 +2868,7 @@ const WindingPathApp = () => {
             console.log('Deleted archive:', key);
           }
         }
-        
+
         // Clear check-in keys
         const checkInKeys = await window.storage.list('windingPath:checkIn:');
         if (checkInKeys && checkInKeys.keys) {
@@ -2882,7 +2882,7 @@ const WindingPathApp = () => {
     } catch (err) {
       console.error('Error clearing storage:', err);
     }
-    
+
     // Clear all app state
     setUserName('');
     setUserSignature('');
@@ -2910,9 +2910,9 @@ const WindingPathApp = () => {
       synchronicity3: '',
       synchronicity4: '',
     });
-    
+
     console.log('All state cleared, setting appState to splash');
-    
+
     // Return to splash screen
     setAppState('splash');
     console.log('Reset complete');
@@ -2962,7 +2962,7 @@ const WindingPathApp = () => {
           }
         `}</style>
         <div className="text-center max-w-2xl">
-          <h1 
+          <h1
             className="text-6xl mb-12 fade-in"
             style={{ fontFamily: 'Helvetica, Arial, sans-serif', color: '#030f42', fontWeight: 'normal' }}
           >
@@ -2971,8 +2971,8 @@ const WindingPathApp = () => {
           <button
             onClick={handleBegin}
             className="px-12 py-4 text-xl transition-all hover:opacity-80 fade-in-delay-1 mb-12"
-            style={{ 
-              fontFamily: 'Helvetica, Arial, sans-serif', 
+            style={{
+              fontFamily: 'Helvetica, Arial, sans-serif',
               backgroundColor: '#030f42',
               color: 'white'
             }}
@@ -2980,7 +2980,7 @@ const WindingPathApp = () => {
             begin
           </button>
           {splashQuote && (
-            <p 
+            <p
               className="text-base fade-in-delay-2"
               style={{ fontFamily: 'Arial Black, Arial, sans-serif', color: '#c5d2ed', lineHeight: 1.6 }}
             >
@@ -3014,7 +3014,7 @@ const WindingPathApp = () => {
           }
         `}</style>
         <div className="text-center max-w-md w-full">
-          <h2 
+          <h2
             className="text-3xl mb-8 fade-in"
             style={{ fontFamily: 'Helvetica, Arial, sans-serif', color: '#030f42', fontWeight: 'normal' }}
           >
@@ -3028,7 +3028,7 @@ const WindingPathApp = () => {
             placeholder="your name"
             autoFocus
             className="w-full px-2 py-3 text-lg text-center focus:outline-none border-b-2 fade-in-delay-1"
-            style={{ 
+            style={{
               fontFamily: 'Helvetica, Arial, sans-serif',
               borderColor: '#030f42',
               color: '#030f42',
@@ -3042,8 +3042,8 @@ const WindingPathApp = () => {
             onClick={handleNameSubmit}
             disabled={!nameInput.trim()}
             className="mt-8 px-12 py-3 text-lg transition-all hover:opacity-80 disabled:opacity-30 fade-in-delay-2"
-            style={{ 
-              fontFamily: 'Helvetica, Arial, sans-serif', 
+            style={{
+              fontFamily: 'Helvetica, Arial, sans-serif',
               backgroundColor: '#030f42',
               color: 'white'
             }}
@@ -3078,25 +3078,25 @@ const WindingPathApp = () => {
         `}</style>
         <div className="max-w-3xl mx-auto">
           <div className="border p-8 mb-8 fade-in" style={{ borderColor: '#030f42' }}>
-            <p 
+            <p
               className="text-base leading-relaxed mb-4"
               style={{ fontFamily: 'Helvetica, Arial, sans-serif', color: '#030f42' }}
             >
               I, <span className="font-bold">{userName}</span>, understand that I am undertaking an intensive, guided encounter with my own creativity. I commit myself to the twelve-week duration of the course.
             </p>
-            <p 
+            <p
               className="text-base leading-relaxed mb-4"
               style={{ fontFamily: 'Helvetica, Arial, sans-serif', color: '#030f42' }}
             >
               I, <span className="font-bold">{userName}</span>, commit to weekly reading, daily pages, a weekly pit stop, and the fulfillment of each week's tasks.
             </p>
-            <p 
+            <p
               className="text-base leading-relaxed mb-4"
               style={{ fontFamily: 'Helvetica, Arial, sans-serif', color: '#030f42' }}
             >
               I, <span className="font-bold">{userName}</span>, further understand that this course will raise issues and emotions for me to deal with.
             </p>
-            <p 
+            <p
               className="text-base leading-relaxed"
               style={{ fontFamily: 'Helvetica, Arial, sans-serif', color: '#030f42' }}
             >
@@ -3106,7 +3106,7 @@ const WindingPathApp = () => {
 
           {/* Signature Box */}
           <div className="mb-6 fade-in-delay-1">
-            <p 
+            <p
               className="text-sm mb-2"
               style={{ fontFamily: 'Helvetica, Arial, sans-serif', color: '#030f42', opacity: 0.7 }}
             >
@@ -3121,7 +3121,7 @@ const WindingPathApp = () => {
               onMouseUp={stopDrawing}
               onMouseLeave={stopDrawing}
               className="border w-full bg-white"
-              style={{ 
+              style={{
                 borderColor: '#030f42',
                 cursor: 'crosshair'
               }}
@@ -3152,7 +3152,7 @@ const WindingPathApp = () => {
                 placeholder="your email address"
                 disabled={!emailOptIn}
                 className={`flex-1 px-4 py-3 border focus:outline-none ${!emailOptIn ? 'opacity-40' : ''}`}
-                style={{ 
+                style={{
                   fontFamily: 'Helvetica, Arial, sans-serif',
                   borderColor: '#030f42',
                   color: '#030f42'
@@ -3185,8 +3185,8 @@ const WindingPathApp = () => {
             onClick={handleContractComplete}
             disabled={!userSignature}
             className="px-12 py-3 text-lg transition-all hover:opacity-80 disabled:opacity-30"
-            style={{ 
-              fontFamily: 'Helvetica, Arial, sans-serif', 
+            style={{
+              fontFamily: 'Helvetica, Arial, sans-serif',
               backgroundColor: '#030f42',
               color: 'white'
             }}
@@ -3201,7 +3201,7 @@ const WindingPathApp = () => {
   // Onboarding Screen - Check-in Day
   if (appState === 'onboarding-checkin') {
     const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-    
+
     return (
       <div className="min-h-screen bg-white flex items-center justify-center p-4">
         <style>{`
@@ -3222,7 +3222,7 @@ const WindingPathApp = () => {
           }
         `}</style>
         <div className="text-center max-w-4xl w-full">
-          <p 
+          <p
             className="text-2xl mb-12 leading-relaxed fade-in"
             style={{ fontFamily: 'Helvetica, Arial, sans-serif', color: '#030f42', fontWeight: 'normal' }}
           >
@@ -3237,7 +3237,7 @@ const WindingPathApp = () => {
                 className={`flex-1 px-3 py-4 text-sm border-t border-b transition-all ${
                   checkInDay === day ? '' : 'opacity-50 hover:opacity-100'
                 }`}
-                style={{ 
+                style={{
                   fontFamily: 'Helvetica, Arial, sans-serif',
                   borderColor: '#030f42',
                   borderLeft: index === 0 ? `1px solid #030f42` : 'none',
@@ -3254,8 +3254,8 @@ const WindingPathApp = () => {
             onClick={() => handleCheckInDaySelect(checkInDay)}
             disabled={!checkInDay}
             className="px-12 py-3 text-lg transition-all hover:opacity-80 disabled:opacity-30 fade-in-delay-2"
-            style={{ 
-              fontFamily: 'Helvetica, Arial, sans-serif', 
+            style={{
+              fontFamily: 'Helvetica, Arial, sans-serif',
               backgroundColor: '#030f42',
               color: 'white'
             }}
@@ -3290,7 +3290,7 @@ const WindingPathApp = () => {
         `}</style>
         <div className="flex items-center justify-center max-w-4xl w-full gap-12">
           <div className="text-center flex-1">
-            <h1 
+            <h1
               className="text-4xl mb-12 fade-in"
               style={{ fontFamily: 'Helvetica, Arial, sans-serif', color: '#030f42', fontWeight: 'normal' }}
             >
@@ -3299,8 +3299,8 @@ const WindingPathApp = () => {
             <button
               onClick={() => setAppState('onboarding-pages')}
               className="px-12 py-3 text-lg transition-all hover:opacity-80 fade-in-delay-1"
-              style={{ 
-                fontFamily: 'Helvetica, Arial, sans-serif', 
+              style={{
+                fontFamily: 'Helvetica, Arial, sans-serif',
                 backgroundColor: '#030f42',
                 color: 'white'
               }}
@@ -3310,8 +3310,8 @@ const WindingPathApp = () => {
           </div>
           {/* Image placeholder - update src with correct GitHub raw URL */}
           <div className="fade-in-delay-2" style={{ flexShrink: 0 }}>
-            <img 
-              src="https://github.com/sulfuricT/thewanderingpath/blob/main/1.png?raw=true" 
+            <img
+              src="https://github.com/sulfuricT/thewanderingpath/blob/main/1.png?raw=true"
               alt="The Winding Path"
               style={{ maxWidth: '280px', height: 'auto' }}
               onError={(e) => { e.target.style.display = 'none'; }}
@@ -3340,7 +3340,7 @@ const WindingPathApp = () => {
           }
         `}</style>
         <div className="text-center max-w-2xl">
-          <p 
+          <p
             className="text-xl mb-12 leading-relaxed fade-in"
             style={{ fontFamily: 'Helvetica, Arial, sans-serif', color: '#030f42', fontWeight: 'normal' }}
           >
@@ -3349,8 +3349,8 @@ const WindingPathApp = () => {
           <button
             onClick={() => setAppState('onboarding-tasks')}
             className="px-12 py-3 text-lg transition-all hover:opacity-80 fade-in-delay-1"
-            style={{ 
-              fontFamily: 'Helvetica, Arial, sans-serif', 
+            style={{
+              fontFamily: 'Helvetica, Arial, sans-serif',
               backgroundColor: '#030f42',
               color: 'white'
             }}
@@ -3380,7 +3380,7 @@ const WindingPathApp = () => {
           }
         `}</style>
         <div className="text-center max-w-2xl">
-          <p 
+          <p
             className="text-xl mb-12 leading-relaxed fade-in"
             style={{ fontFamily: 'Helvetica, Arial, sans-serif', color: '#030f42', fontWeight: 'normal' }}
           >
@@ -3389,8 +3389,8 @@ const WindingPathApp = () => {
           <button
             onClick={() => setAppState('onboarding-well')}
             className="px-12 py-3 text-lg transition-all hover:opacity-80 fade-in-delay-1"
-            style={{ 
-              fontFamily: 'Helvetica, Arial, sans-serif', 
+            style={{
+              fontFamily: 'Helvetica, Arial, sans-serif',
               backgroundColor: '#030f42',
               color: 'white'
             }}
@@ -3420,7 +3420,7 @@ const WindingPathApp = () => {
           }
         `}</style>
         <div className="text-center max-w-2xl">
-          <p 
+          <p
             className="text-xl mb-12 leading-relaxed fade-in"
             style={{ fontFamily: 'Helvetica, Arial, sans-serif', color: '#030f42', fontWeight: 'normal' }}
           >
@@ -3429,8 +3429,8 @@ const WindingPathApp = () => {
           <button
             onClick={() => setAppState('onboarding-landscape')}
             className="px-12 py-3 text-lg transition-all hover:opacity-80 fade-in-delay-1"
-            style={{ 
-              fontFamily: 'Helvetica, Arial, sans-serif', 
+            style={{
+              fontFamily: 'Helvetica, Arial, sans-serif',
               backgroundColor: '#030f42',
               color: 'white'
             }}
@@ -3460,7 +3460,7 @@ const WindingPathApp = () => {
           }
         `}</style>
         <div className="text-center max-w-2xl">
-          <p 
+          <p
             className="text-xl mb-12 leading-relaxed fade-in"
             style={{ fontFamily: 'Helvetica, Arial, sans-serif', color: '#030f42', fontWeight: 'normal' }}
           >
@@ -3469,8 +3469,8 @@ const WindingPathApp = () => {
           <button
             onClick={() => setAppState('onboarding-watchtower')}
             className="px-12 py-3 text-lg transition-all hover:opacity-80 fade-in-delay-1"
-            style={{ 
-              fontFamily: 'Helvetica, Arial, sans-serif', 
+            style={{
+              fontFamily: 'Helvetica, Arial, sans-serif',
               backgroundColor: '#030f42',
               color: 'white'
             }}
@@ -3500,7 +3500,7 @@ const WindingPathApp = () => {
           }
         `}</style>
         <div className="text-center max-w-2xl">
-          <p 
+          <p
             className="text-xl mb-12 leading-relaxed fade-in"
             style={{ fontFamily: 'Helvetica, Arial, sans-serif', color: '#030f42', fontWeight: 'normal' }}
           >
@@ -3509,8 +3509,8 @@ const WindingPathApp = () => {
           <button
             onClick={() => setAppState('main')}
             className="px-12 py-3 text-lg transition-all hover:opacity-80 fade-in-delay-1"
-            style={{ 
-              fontFamily: 'Helvetica, Arial, sans-serif', 
+            style={{
+              fontFamily: 'Helvetica, Arial, sans-serif',
               backgroundColor: '#030f42',
               color: 'white'
             }}
@@ -3541,7 +3541,7 @@ const WindingPathApp = () => {
             >
               the winding path
             </button>
-            
+
             <div className="space-y-3">
               <button
                 onClick={() => setCurrentPage('well')}
@@ -3590,7 +3590,7 @@ const WindingPathApp = () => {
             <div>
               {/* Header */}
               <div className="mb-12">
-                <h1 
+                <h1
                   className="text-4xl mb-2"
                   style={{ fontFamily: 'Helvetica, Arial, sans-serif', color: '#030f42', fontWeight: 'normal' }}
                 >
@@ -3650,7 +3650,7 @@ const WindingPathApp = () => {
               {/* The Pages */}
               <div className="p-8 border mb-12" style={{ borderColor: '#030f42' }}>
                 <div className="flex justify-between items-center mb-6">
-                  <h2 
+                  <h2
                     className="text-2xl"
                     style={{ fontFamily: 'Helvetica, Arial, sans-serif', color: '#030f42', fontWeight: 'normal' }}
                   >
@@ -3667,7 +3667,7 @@ const WindingPathApp = () => {
                     onChange={(e) => setPageEntry(e.target.value)}
                     placeholder="Do anything, until you have three pages."
                     className="w-full h-64 p-4 border focus:outline-none resize-none"
-                    style={{ 
+                    style={{
                       fontFamily: 'Helvetica, Arial, sans-serif',
                       borderColor: '#030f42',
                       color: '#030f42'
@@ -3682,7 +3682,7 @@ const WindingPathApp = () => {
                     <span>1000 words</span>
                   </div>
                   <div className="w-full rounded-full h-2" style={{ backgroundColor: '#e5e7eb' }}>
-                    <div 
+                    <div
                       className="h-2 rounded-full transition-all duration-300"
                       style={{ width: `${wordProgress}%`, backgroundColor: '#030f42' }}
                     />
@@ -3700,16 +3700,16 @@ const WindingPathApp = () => {
               {/* Check-In Section - Only visible on check-in day */}
               {isCheckInDay() && (
                 <div className="p-8 border mb-12" style={{ borderColor: '#030f42' }}>
-                  <h2 
+                  <h2
                     className="text-2xl mb-8"
                     style={{ fontFamily: 'Helvetica, Arial, sans-serif', color: '#030f42', fontWeight: 'normal' }}
                   >
                     check in
                   </h2>
-                  
+
                   {/* Question 1 */}
                   <div className="mb-8">
-                    <label 
+                    <label
                       className="block text-sm font-semibold mb-3"
                       style={{ fontFamily: 'Helvetica, Arial, sans-serif', color: '#030f42' }}
                     >
@@ -3720,7 +3720,7 @@ const WindingPathApp = () => {
                       onChange={(e) => setCheckInResponses({ ...checkInResponses, pages: e.target.value })}
                       placeholder="Your response..."
                       className="w-full h-32 p-4 border focus:outline-none resize-none"
-                      style={{ 
+                      style={{
                         fontFamily: 'Helvetica, Arial, sans-serif',
                         borderColor: '#030f42',
                         color: '#030f42'
@@ -3730,7 +3730,7 @@ const WindingPathApp = () => {
 
                   {/* Question 2 */}
                   <div className="mb-8">
-                    <label 
+                    <label
                       className="block text-sm font-semibold mb-3"
                       style={{ fontFamily: 'Helvetica, Arial, sans-serif', color: '#030f42' }}
                     >
@@ -3741,7 +3741,7 @@ const WindingPathApp = () => {
                       onChange={(e) => setCheckInResponses({ ...checkInResponses, pitStop: e.target.value })}
                       placeholder="Your response..."
                       className="w-full h-32 p-4 border focus:outline-none resize-none"
-                      style={{ 
+                      style={{
                         fontFamily: 'Helvetica, Arial, sans-serif',
                         borderColor: '#030f42',
                         color: '#030f42'
@@ -3751,7 +3751,7 @@ const WindingPathApp = () => {
 
                   {/* Question 3 */}
                   <div className="mb-8">
-                    <label 
+                    <label
                       className="block text-sm font-semibold mb-3"
                       style={{ fontFamily: 'Helvetica, Arial, sans-serif', color: '#030f42' }}
                     >
@@ -3762,7 +3762,7 @@ const WindingPathApp = () => {
                       onChange={(e) => setCheckInResponses({ ...checkInResponses, synchronicity: e.target.value })}
                       placeholder="Your response..."
                       className="w-full h-32 p-4 border focus:outline-none resize-none"
-                      style={{ 
+                      style={{
                         fontFamily: 'Helvetica, Arial, sans-serif',
                         borderColor: '#030f42',
                         color: '#030f42'
@@ -3772,7 +3772,7 @@ const WindingPathApp = () => {
 
                   {/* Question 4 */}
                   <div className="mb-8">
-                    <label 
+                    <label
                       className="block text-sm font-semibold mb-3"
                       style={{ fontFamily: 'Helvetica, Arial, sans-serif', color: '#030f42' }}
                     >
@@ -3783,7 +3783,7 @@ const WindingPathApp = () => {
                       onChange={(e) => setCheckInResponses({ ...checkInResponses, otherIssues: e.target.value })}
                       placeholder="Your response..."
                       className="w-full h-32 p-4 border focus:outline-none resize-none"
-                      style={{ 
+                      style={{
                         fontFamily: 'Helvetica, Arial, sans-serif',
                         borderColor: '#030f42',
                         color: '#030f42'
@@ -3795,13 +3795,13 @@ const WindingPathApp = () => {
                   <button
                     onClick={async () => {
                       const today = new Date().toISOString().split('T')[0];
-                      
+
                       // Save to check-in storage
                       await storageSet(`windingPath:checkIn:${today}`, checkInResponses);
-                      
+
                       // Save to Supabase
                       await saveCheckInToSupabase(checkInResponses);
-                      
+
                       // Update app state archive
                       const newArchiveData = { ...archiveData };
                       newArchiveData[today] = {
@@ -3811,11 +3811,11 @@ const WindingPathApp = () => {
                         savedAt: new Date().toISOString()
                       };
                       setArchiveData(newArchiveData);
-                      
+
                       alert('Check-in saved successfully!');
                     }}
-                    style={{ 
-                      fontFamily: 'Helvetica, Arial, sans-serif', 
+                    style={{
+                      fontFamily: 'Helvetica, Arial, sans-serif',
                       backgroundColor: '#030f42',
                       color: 'white'
                     }}
@@ -3829,11 +3829,11 @@ const WindingPathApp = () => {
               {/* Weekly Prompts - Dynamic Week Loading */}
               {(() => {
                 const WeekComponent = getWeekComponent(currentWeek);
-                
+
                 if (WeekComponent) {
                   // Week 2-12: Load the week-specific component
                   return (
-                    <WeekComponent 
+                    <WeekComponent
                       archiveData={archiveData}
                       setArchiveData={setArchiveData}
                       storageSet={storageSet}
@@ -3842,7 +3842,7 @@ const WindingPathApp = () => {
                 } else {
                   // Week 1: Use the hardcoded WeeklyPrompts
                   return (
-                    <WeeklyPrompts 
+                    <WeeklyPrompts
                       currentWeek={currentWeek}
                       storageSet={storageSet}
                       checkInDay={checkInDay}
@@ -3866,19 +3866,19 @@ const WindingPathApp = () => {
 
           {/* The Landscape Page */}
           {currentPage === 'landscape' && (
-            <div 
+            <div
               className="flex"
-              style={{ 
+              style={{
                 position: 'relative',
                 minHeight: 'calc(100vh - 96px)',
-                marginLeft: '-3rem', 
+                marginLeft: '-3rem',
                 marginRight: '-3rem',
               }}
             >
               {/* Week Index - Visible on left side */}
-              <div 
-                className="flex flex-col items-center py-6" 
-                style={{ 
+              <div
+                className="flex flex-col items-center py-6"
+                style={{
                   width: '48px',
                   minWidth: '48px',
                   borderRight: '1px solid #030f42',
@@ -3917,10 +3917,10 @@ const WindingPathApp = () => {
               </div>
 
               {/* Landscape Canvas - Full page, white background */}
-              <div 
+              <div
                 ref={landscapeRef}
                 className="flex-1 relative"
-                style={{ 
+                style={{
                   backgroundColor: 'white',
                   cursor: landscapeDragging ? 'grabbing' : 'default',
                 }}
@@ -3931,9 +3931,9 @@ const WindingPathApp = () => {
                     const newY = ((e.clientY - rect.top) / rect.height) * 100;
                     setLandscapePositions(prev => ({
                       ...prev,
-                      [landscapeDragging]: { 
-                        x: Math.max(5, Math.min(95, newX)), 
-                        y: Math.max(5, Math.min(95, newY)) 
+                      [landscapeDragging]: {
+                        x: Math.max(5, Math.min(95, newX)),
+                        y: Math.max(5, Math.min(95, newY))
                       }
                     }));
                   }
@@ -3947,9 +3947,9 @@ const WindingPathApp = () => {
                     {/* Star 1 - Basic Principles */}
                     <div
                       className="absolute transition-opacity"
-                      style={{ 
-                        left: `${landscapePositions.star1.x}%`, 
-                        top: `${landscapePositions.star1.y}%`, 
+                      style={{
+                        left: `${landscapePositions.star1.x}%`,
+                        top: `${landscapePositions.star1.y}%`,
                         transform: 'translate(-50%, -50%)',
                         opacity: landscapeActiveLayer === 1 || landscapeActiveLayer === null ? 1 : 0.12,
                         cursor: landscapeDragging === 'star1' ? 'grabbing' : 'grab',
@@ -3965,7 +3965,7 @@ const WindingPathApp = () => {
                       }}
                     >
                       <svg width="32" height="32" viewBox="0 0 32 32" fill="none" className="hover:scale-110 transition-transform">
-                        <path d="M16 0 L18 12 L30 14 L20 18 L22 30 L16 22 L10 30 L12 18 L2 14 L14 12 Z" 
+                        <path d="M16 0 L18 12 L30 14 L20 18 L22 30 L16 22 L10 30 L12 18 L2 14 L14 12 Z"
                           stroke="#030f42" strokeWidth="0.75" fill="none"/>
                         <circle cx="16" cy="16" r="3" stroke="#030f42" strokeWidth="0.75" fill="none"/>
                       </svg>
@@ -3974,9 +3974,9 @@ const WindingPathApp = () => {
                     {/* Star 2 - Stop Telling Yourself */}
                     <div
                       className="absolute transition-opacity"
-                      style={{ 
-                        left: `${landscapePositions.star2.x}%`, 
-                        top: `${landscapePositions.star2.y}%`, 
+                      style={{
+                        left: `${landscapePositions.star2.x}%`,
+                        top: `${landscapePositions.star2.y}%`,
                         transform: 'translate(-50%, -50%)',
                         opacity: landscapeActiveLayer === 1 || landscapeActiveLayer === null ? 1 : 0.12,
                         cursor: landscapeDragging === 'star2' ? 'grabbing' : 'grab',
@@ -3992,7 +3992,7 @@ const WindingPathApp = () => {
                       }}
                     >
                       <svg width="28" height="28" viewBox="0 0 28 28" fill="none" className="hover:scale-110 transition-transform">
-                        <path d="M14 0 L16 10 L26 12 L18 16 L20 26 L14 20 L8 26 L10 16 L2 12 L12 10 Z" 
+                        <path d="M14 0 L16 10 L26 12 L18 16 L20 26 L14 20 L8 26 L10 16 L2 12 L12 10 Z"
                           stroke="#030f42" strokeWidth="0.75" fill="none"/>
                         <circle cx="14" cy="14" r="2.5" stroke="#030f42" strokeWidth="0.75" fill="none"/>
                       </svg>
@@ -4001,9 +4001,9 @@ const WindingPathApp = () => {
                     {/* Star 3 - Affirmations */}
                     <div
                       className="absolute transition-opacity"
-                      style={{ 
-                        left: `${landscapePositions.star3.x}%`, 
-                        top: `${landscapePositions.star3.y}%`, 
+                      style={{
+                        left: `${landscapePositions.star3.x}%`,
+                        top: `${landscapePositions.star3.y}%`,
                         transform: 'translate(-50%, -50%)',
                         opacity: landscapeActiveLayer === 1 || landscapeActiveLayer === null ? 1 : 0.12,
                         cursor: landscapeDragging === 'star3' ? 'grabbing' : 'grab',
@@ -4019,7 +4019,7 @@ const WindingPathApp = () => {
                       }}
                     >
                       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" className="hover:scale-110 transition-transform">
-                        <path d="M12 0 L14 8 L22 10 L16 14 L18 22 L12 17 L6 22 L8 14 L2 10 L10 8 Z" 
+                        <path d="M12 0 L14 8 L22 10 L16 14 L18 22 L12 17 L6 22 L8 14 L2 10 L10 8 Z"
                           stroke="#030f42" strokeWidth="0.75" fill="none"/>
                         <circle cx="12" cy="12" r="2" stroke="#030f42" strokeWidth="0.75" fill="none"/>
                       </svg>
@@ -4033,9 +4033,9 @@ const WindingPathApp = () => {
                     {/* Floating word - SANITY */}
                     <div
                       className="absolute transition-opacity select-none"
-                      style={{ 
-                        left: `${landscapePositions.word_sanity.x}%`, 
-                        top: `${landscapePositions.word_sanity.y}%`, 
+                      style={{
+                        left: `${landscapePositions.word_sanity.x}%`,
+                        top: `${landscapePositions.word_sanity.y}%`,
                         transform: 'translate(-50%, -50%)',
                         opacity: landscapeActiveLayer === 2 || landscapeActiveLayer === null ? 0.4 : 0.08,
                         cursor: landscapeDragging === 'word_sanity' ? 'grabbing' : 'grab',
@@ -4055,9 +4055,9 @@ const WindingPathApp = () => {
                     {/* Floating word - SKEPTICISM */}
                     <div
                       className="absolute transition-opacity select-none"
-                      style={{ 
-                        left: `${landscapePositions.word_skepticism.x}%`, 
-                        top: `${landscapePositions.word_skepticism.y}%`, 
+                      style={{
+                        left: `${landscapePositions.word_skepticism.x}%`,
+                        top: `${landscapePositions.word_skepticism.y}%`,
                         transform: 'translate(-50%, -50%)',
                         opacity: landscapeActiveLayer === 2 || landscapeActiveLayer === null ? 0.4 : 0.08,
                         cursor: landscapeDragging === 'word_skepticism' ? 'grabbing' : 'grab',
@@ -4077,9 +4077,9 @@ const WindingPathApp = () => {
                     {/* Floating word - ATTENTION */}
                     <div
                       className="absolute transition-opacity select-none"
-                      style={{ 
-                        left: `${landscapePositions.word_attention.x}%`, 
-                        top: `${landscapePositions.word_attention.y}%`, 
+                      style={{
+                        left: `${landscapePositions.word_attention.x}%`,
+                        top: `${landscapePositions.word_attention.y}%`,
                         transform: 'translate(-50%, -50%)',
                         opacity: landscapeActiveLayer === 2 || landscapeActiveLayer === null ? 0.4 : 0.08,
                         cursor: landscapeDragging === 'word_attention' ? 'grabbing' : 'grab',
@@ -4099,9 +4099,9 @@ const WindingPathApp = () => {
                     {/* Signpost - Rules of the Road */}
                     <div
                       className="absolute transition-opacity"
-                      style={{ 
-                        left: `${landscapePositions.signpost.x}%`, 
-                        top: `${landscapePositions.signpost.y}%`, 
+                      style={{
+                        left: `${landscapePositions.signpost.x}%`,
+                        top: `${landscapePositions.signpost.y}%`,
                         transform: 'translate(-50%, -50%)',
                         opacity: landscapeActiveLayer === 2 || landscapeActiveLayer === null ? 1 : 0.12,
                         cursor: landscapeDragging === 'signpost' ? 'grabbing' : 'grab',
@@ -4151,9 +4151,9 @@ const WindingPathApp = () => {
                     {/* Floating word - ANGER */}
                     <div
                       className="absolute transition-opacity select-none"
-                      style={{ 
-                        left: `${landscapePositions.word_anger.x}%`, 
-                        top: `${landscapePositions.word_anger.y}%`, 
+                      style={{
+                        left: `${landscapePositions.word_anger.x}%`,
+                        top: `${landscapePositions.word_anger.y}%`,
                         transform: 'translate(-50%, -50%)',
                         opacity: landscapeActiveLayer === 3 || landscapeActiveLayer === null ? 0.35 : 0.08,
                         cursor: landscapeDragging === 'word_anger' ? 'grabbing' : 'grab',
@@ -4173,9 +4173,9 @@ const WindingPathApp = () => {
                     {/* Floating word - SYNCHRONICITY */}
                     <div
                       className="absolute transition-opacity select-none"
-                      style={{ 
-                        left: `${landscapePositions.word_synchronicity.x}%`, 
-                        top: `${landscapePositions.word_synchronicity.y}%`, 
+                      style={{
+                        left: `${landscapePositions.word_synchronicity.x}%`,
+                        top: `${landscapePositions.word_synchronicity.y}%`,
                         transform: 'translate(-50%, -50%)',
                         opacity: landscapeActiveLayer === 3 || landscapeActiveLayer === null ? 0.35 : 0.08,
                         cursor: landscapeDragging === 'word_synchronicity' ? 'grabbing' : 'grab',
@@ -4195,9 +4195,9 @@ const WindingPathApp = () => {
                     {/* Floating word - SHAME */}
                     <div
                       className="absolute transition-opacity select-none"
-                      style={{ 
-                        left: `${landscapePositions.word_shame.x}%`, 
-                        top: `${landscapePositions.word_shame.y}%`, 
+                      style={{
+                        left: `${landscapePositions.word_shame.x}%`,
+                        top: `${landscapePositions.word_shame.y}%`,
                         transform: 'translate(-50%, -50%)',
                         opacity: landscapeActiveLayer === 3 || landscapeActiveLayer === null ? 0.35 : 0.08,
                         cursor: landscapeDragging === 'word_shame' ? 'grabbing' : 'grab',
@@ -4217,9 +4217,9 @@ const WindingPathApp = () => {
                     {/* Floating word - GROWTH */}
                     <div
                       className="absolute transition-opacity select-none"
-                      style={{ 
-                        left: `${landscapePositions.word_growth.x}%`, 
-                        top: `${landscapePositions.word_growth.y}%`, 
+                      style={{
+                        left: `${landscapePositions.word_growth.x}%`,
+                        top: `${landscapePositions.word_growth.y}%`,
                         transform: 'translate(-50%, -50%)',
                         opacity: landscapeActiveLayer === 3 || landscapeActiveLayer === null ? 0.35 : 0.08,
                         cursor: landscapeDragging === 'word_growth' ? 'grabbing' : 'grab',
@@ -4239,9 +4239,9 @@ const WindingPathApp = () => {
                     {/* Tree 1 - Criticism */}
                     <div
                       className="absolute transition-opacity"
-                      style={{ 
-                        left: `${landscapePositions.tree1.x}%`, 
-                        top: `${landscapePositions.tree1.y}%`, 
+                      style={{
+                        left: `${landscapePositions.tree1.x}%`,
+                        top: `${landscapePositions.tree1.y}%`,
                         transform: 'translate(-50%, -50%)',
                         opacity: landscapeActiveLayer === 3 || landscapeActiveLayer === null ? 1 : 0.12,
                         cursor: landscapeDragging === 'tree1' ? 'grabbing' : 'grab',
@@ -4264,9 +4264,9 @@ const WindingPathApp = () => {
                     {/* Tree 2 - Synchronicity - larger */}
                     <div
                       className="absolute transition-opacity"
-                      style={{ 
-                        left: `${landscapePositions.tree2.x}%`, 
-                        top: `${landscapePositions.tree2.y}%`, 
+                      style={{
+                        left: `${landscapePositions.tree2.x}%`,
+                        top: `${landscapePositions.tree2.y}%`,
                         transform: 'translate(-50%, -50%)',
                         opacity: landscapeActiveLayer === 3 || landscapeActiveLayer === null ? 1 : 0.12,
                         cursor: landscapeDragging === 'tree2' ? 'grabbing' : 'grab',
@@ -4289,9 +4289,9 @@ const WindingPathApp = () => {
                     {/* Tree 3 - Questions - smaller */}
                     <div
                       className="absolute transition-opacity"
-                      style={{ 
-                        left: `${landscapePositions.tree3.x}%`, 
-                        top: `${landscapePositions.tree3.y}%`, 
+                      style={{
+                        left: `${landscapePositions.tree3.x}%`,
+                        top: `${landscapePositions.tree3.y}%`,
                         transform: 'translate(-50%, -50%)',
                         opacity: landscapeActiveLayer === 3 || landscapeActiveLayer === null ? 1 : 0.12,
                         cursor: landscapeDragging === 'tree3' ? 'grabbing' : 'grab',
@@ -4319,9 +4319,9 @@ const WindingPathApp = () => {
                     {/* Bird 1 - Hobbies/Lists (larger) */}
                     <div
                       className="absolute transition-opacity"
-                      style={{ 
-                        left: `${landscapePositions.bird1.x}%`, 
-                        top: `${landscapePositions.bird1.y}%`, 
+                      style={{
+                        left: `${landscapePositions.bird1.x}%`,
+                        top: `${landscapePositions.bird1.y}%`,
                         transform: 'translate(-50%, -50%)',
                         opacity: landscapeActiveLayer === 4 || landscapeActiveLayer === null ? 1 : 0.12,
                         cursor: landscapeDragging === 'bird1' ? 'grabbing' : 'grab',
@@ -4346,9 +4346,9 @@ const WindingPathApp = () => {
                     {/* Bird 2 - Kriya (medium) */}
                     <div
                       className="absolute transition-opacity"
-                      style={{ 
-                        left: `${landscapePositions.bird2.x}%`, 
-                        top: `${landscapePositions.bird2.y}%`, 
+                      style={{
+                        left: `${landscapePositions.bird2.x}%`,
+                        top: `${landscapePositions.bird2.y}%`,
                         transform: 'translate(-50%, -50%)',
                         opacity: landscapeActiveLayer === 4 || landscapeActiveLayer === null ? 1 : 0.12,
                         cursor: landscapeDragging === 'bird2' ? 'grabbing' : 'grab',
@@ -4372,9 +4372,9 @@ const WindingPathApp = () => {
                     {/* Bird 3 - Reading Deprivation (smaller, distant) */}
                     <div
                       className="absolute transition-opacity"
-                      style={{ 
-                        left: `${landscapePositions.bird3.x}%`, 
-                        top: `${landscapePositions.bird3.y}%`, 
+                      style={{
+                        left: `${landscapePositions.bird3.x}%`,
+                        top: `${landscapePositions.bird3.y}%`,
                         transform: 'translate(-50%, -50%)',
                         opacity: landscapeActiveLayer === 4 || landscapeActiveLayer === null ? 1 : 0.12,
                         cursor: landscapeDragging === 'bird3' ? 'grabbing' : 'grab',
@@ -4398,9 +4398,9 @@ const WindingPathApp = () => {
                     {/* Bird 4 - Prayer/Creator */}
                     <div
                       className="absolute transition-opacity"
-                      style={{ 
-                        left: `${landscapePositions.bird4.x}%`, 
-                        top: `${landscapePositions.bird4.y}%`, 
+                      style={{
+                        left: `${landscapePositions.bird4.x}%`,
+                        top: `${landscapePositions.bird4.y}%`,
                         transform: 'translate(-50%, -50%)',
                         opacity: landscapeActiveLayer === 4 || landscapeActiveLayer === null ? 1 : 0.12,
                         cursor: landscapeDragging === 'bird4' ? 'grabbing' : 'grab',
@@ -4429,9 +4429,9 @@ const WindingPathApp = () => {
                     {/* Cloud 1 - Virtue Trap Quiz */}
                     <div
                       className="absolute transition-opacity"
-                      style={{ 
-                        left: `${landscapePositions.cloud1.x}%`, 
-                        top: `${landscapePositions.cloud1.y}%`, 
+                      style={{
+                        left: `${landscapePositions.cloud1.x}%`,
+                        top: `${landscapePositions.cloud1.y}%`,
                         transform: 'translate(-50%, -50%)',
                         opacity: landscapeActiveLayer === 5 || landscapeActiveLayer === null ? 1 : 0.12,
                         cursor: landscapeDragging === 'cloud1' ? 'grabbing' : 'grab',
@@ -4454,9 +4454,9 @@ const WindingPathApp = () => {
                     {/* Cloud 2 - Forbidden Joys */}
                     <div
                       className="absolute transition-opacity"
-                      style={{ 
-                        left: `${landscapePositions.cloud2.x}%`, 
-                        top: `${landscapePositions.cloud2.y}%`, 
+                      style={{
+                        left: `${landscapePositions.cloud2.x}%`,
+                        top: `${landscapePositions.cloud2.y}%`,
                         transform: 'translate(-50%, -50%)',
                         opacity: landscapeActiveLayer === 5 || landscapeActiveLayer === null ? 1 : 0.12,
                         cursor: landscapeDragging === 'cloud2' ? 'grabbing' : 'grab',
@@ -4479,9 +4479,9 @@ const WindingPathApp = () => {
                     {/* Cloud 3 - Wishes */}
                     <div
                       className="absolute transition-opacity"
-                      style={{ 
-                        left: `${landscapePositions.cloud3.x}%`, 
-                        top: `${landscapePositions.cloud3.y}%`, 
+                      style={{
+                        left: `${landscapePositions.cloud3.x}%`,
+                        top: `${landscapePositions.cloud3.y}%`,
                         transform: 'translate(-50%, -50%)',
                         opacity: landscapeActiveLayer === 5 || landscapeActiveLayer === null ? 1 : 0.12,
                         cursor: landscapeDragging === 'cloud3' ? 'grabbing' : 'grab',
@@ -4509,9 +4509,9 @@ const WindingPathApp = () => {
                     {/* House - Money beliefs */}
                     <div
                       className="absolute transition-opacity"
-                      style={{ 
-                        left: `${landscapePositions.house.x}%`, 
-                        top: `${landscapePositions.house.y}%`, 
+                      style={{
+                        left: `${landscapePositions.house.x}%`,
+                        top: `${landscapePositions.house.y}%`,
                         transform: 'translate(-50%, -50%)',
                         opacity: landscapeActiveLayer === 6 || landscapeActiveLayer === null ? 1 : 0.12,
                         cursor: landscapeDragging === 'house' ? 'grabbing' : 'grab',
@@ -4556,9 +4556,9 @@ const WindingPathApp = () => {
                     {/* Wind 1 - Perfectionism */}
                     <div
                       className="absolute transition-opacity"
-                      style={{ 
-                        left: `${landscapePositions.wind1.x}%`, 
-                        top: `${landscapePositions.wind1.y}%`, 
+                      style={{
+                        left: `${landscapePositions.wind1.x}%`,
+                        top: `${landscapePositions.wind1.y}%`,
                         transform: 'translate(-50%, -50%)',
                         opacity: landscapeActiveLayer === 7 || landscapeActiveLayer === null ? 0.7 : 0.12,
                         cursor: landscapeDragging === 'wind1' ? 'grabbing' : 'grab',
@@ -4581,9 +4581,9 @@ const WindingPathApp = () => {
                     {/* Wind 2 - Jealousy Map */}
                     <div
                       className="absolute transition-opacity"
-                      style={{ 
-                        left: `${landscapePositions.wind2.x}%`, 
-                        top: `${landscapePositions.wind2.y}%`, 
+                      style={{
+                        left: `${landscapePositions.wind2.x}%`,
+                        top: `${landscapePositions.wind2.y}%`,
                         transform: 'translate(-50%, -50%)',
                         opacity: landscapeActiveLayer === 7 || landscapeActiveLayer === null ? 0.7 : 0.12,
                         cursor: landscapeDragging === 'wind2' ? 'grabbing' : 'grab',
@@ -4606,9 +4606,9 @@ const WindingPathApp = () => {
                     {/* Wind 3 - Childhood losses */}
                     <div
                       className="absolute transition-opacity"
-                      style={{ 
-                        left: `${landscapePositions.wind3.x}%`, 
-                        top: `${landscapePositions.wind3.y}%`, 
+                      style={{
+                        left: `${landscapePositions.wind3.x}%`,
+                        top: `${landscapePositions.wind3.y}%`,
                         transform: 'translate(-50%, -50%)',
                         opacity: landscapeActiveLayer === 7 || landscapeActiveLayer === null ? 0.7 : 0.12,
                         cursor: landscapeDragging === 'wind3' ? 'grabbing' : 'grab',
@@ -4631,9 +4631,9 @@ const WindingPathApp = () => {
                     {/* Wind 4 - Gains */}
                     <div
                       className="absolute transition-opacity"
-                      style={{ 
-                        left: `${landscapePositions.wind4.x}%`, 
-                        top: `${landscapePositions.wind4.y}%`, 
+                      style={{
+                        left: `${landscapePositions.wind4.x}%`,
+                        top: `${landscapePositions.wind4.y}%`,
                         transform: 'translate(-50%, -50%)',
                         opacity: landscapeActiveLayer === 7 || landscapeActiveLayer === null ? 0.7 : 0.12,
                         cursor: landscapeDragging === 'wind4' ? 'grabbing' : 'grab',
@@ -4661,9 +4661,9 @@ const WindingPathApp = () => {
                     {/* Raindrop 1 - Art intro/Quote */}
                     <div
                       className="absolute transition-opacity"
-                      style={{ 
-                        left: `${landscapePositions.deer1.x}%`, 
-                        top: `${landscapePositions.deer1.y}%`, 
+                      style={{
+                        left: `${landscapePositions.deer1.x}%`,
+                        top: `${landscapePositions.deer1.y}%`,
                         transform: 'translate(-50%, -50%)',
                         opacity: landscapeActiveLayer === 8 || landscapeActiveLayer === null ? 1 : 0.12,
                         cursor: landscapeDragging === 'deer1' ? 'grabbing' : 'grab',
@@ -4689,9 +4689,9 @@ const WindingPathApp = () => {
                     {/* Raindrop 2 - Parents/Teachers */}
                     <div
                       className="absolute transition-opacity"
-                      style={{ 
-                        left: `${landscapePositions.deer2.x}%`, 
-                        top: `${landscapePositions.deer2.y}%`, 
+                      style={{
+                        left: `${landscapePositions.deer2.x}%`,
+                        top: `${landscapePositions.deer2.y}%`,
                         transform: 'translate(-50%, -50%)',
                         opacity: landscapeActiveLayer === 8 || landscapeActiveLayer === null ? 1 : 0.12,
                         cursor: landscapeDragging === 'deer2' ? 'grabbing' : 'grab',
@@ -4717,9 +4717,9 @@ const WindingPathApp = () => {
                     {/* Raindrop 3 - Affirmations */}
                     <div
                       className="absolute transition-opacity"
-                      style={{ 
-                        left: `${landscapePositions.deer3.x}%`, 
-                        top: `${landscapePositions.deer3.y}%`, 
+                      style={{
+                        left: `${landscapePositions.deer3.x}%`,
+                        top: `${landscapePositions.deer3.y}%`,
                         transform: 'translate(-50%, -50%)',
                         opacity: landscapeActiveLayer === 8 || landscapeActiveLayer === null ? 1 : 0.12,
                         cursor: landscapeDragging === 'deer3' ? 'grabbing' : 'grab',
@@ -4748,9 +4748,9 @@ const WindingPathApp = () => {
                 {currentWeek >= 9 && (
                   <div
                     className="absolute transition-opacity"
-                    style={{ 
-                      left: `${landscapePositions.sun.x}%`, 
-                      top: `${landscapePositions.sun.y}%`, 
+                    style={{
+                      left: `${landscapePositions.sun.x}%`,
+                      top: `${landscapePositions.sun.y}%`,
                       transform: 'translate(-50%, -50%)',
                       opacity: landscapeActiveLayer === 9 || landscapeActiveLayer === null ? 1 : 0.12,
                       cursor: landscapeDragging === 'sun' ? 'grabbing' : 'grab',
@@ -4785,9 +4785,9 @@ const WindingPathApp = () => {
                 {currentWeek >= 10 && (
                   <div
                     className="absolute transition-opacity"
-                    style={{ 
-                      left: `${landscapePositions.moon.x}%`, 
-                      top: `${landscapePositions.moon.y}%`, 
+                    style={{
+                      left: `${landscapePositions.moon.x}%`,
+                      top: `${landscapePositions.moon.y}%`,
                       transform: 'translate(-50%, -50%)',
                       opacity: landscapeActiveLayer === 10 || landscapeActiveLayer === null ? 1 : 0.12,
                       cursor: landscapeDragging === 'moon' ? 'grabbing' : 'grab',
@@ -4804,11 +4804,11 @@ const WindingPathApp = () => {
                   >
                     <svg width="40" height="44" viewBox="0 0 40 44" fill="none" className="hover:scale-110 transition-transform">
                       {/* Elegant crescent moon - pointed tips top and bottom */}
-                      <path d="M18 1 
-                        C8 4 2 14 2 24 
-                        C2 34 10 42 20 43 
-                        C14 40 10 32 10 24 
-                        C10 14 14 6 18 1 Z" 
+                      <path d="M18 1
+                        C8 4 2 14 2 24
+                        C2 34 10 42 20 43
+                        C14 40 10 32 10 24
+                        C10 14 14 6 18 1 Z"
                         stroke="#030f42" strokeWidth="0.75" fill="none"/>
                     </svg>
                   </div>
@@ -4820,9 +4820,9 @@ const WindingPathApp = () => {
                     {/* Person 1 - Artist statement */}
                     <div
                       className="absolute transition-opacity"
-                      style={{ 
-                        left: `${landscapePositions.walker1.x}%`, 
-                        top: `${landscapePositions.walker1.y}%`, 
+                      style={{
+                        left: `${landscapePositions.walker1.x}%`,
+                        top: `${landscapePositions.walker1.y}%`,
                         transform: 'translate(-50%, -50%)',
                         opacity: landscapeActiveLayer === 11 || landscapeActiveLayer === null ? 1 : 0.12,
                         cursor: landscapeDragging === 'walker1' ? 'grabbing' : 'grab',
@@ -4854,9 +4854,9 @@ const WindingPathApp = () => {
                     {/* Person 2 - Spiritual corner */}
                     <div
                       className="absolute transition-opacity"
-                      style={{ 
-                        left: `${landscapePositions.walker2.x}%`, 
-                        top: `${landscapePositions.walker2.y}%`, 
+                      style={{
+                        left: `${landscapePositions.walker2.x}%`,
+                        top: `${landscapePositions.walker2.y}%`,
                         transform: 'translate(-50%, -50%)',
                         opacity: landscapeActiveLayer === 11 || landscapeActiveLayer === null ? 1 : 0.12,
                         cursor: landscapeDragging === 'walker2' ? 'grabbing' : 'grab',
@@ -4891,9 +4891,9 @@ const WindingPathApp = () => {
                 {currentWeek >= 12 && (
                   <div
                     className="absolute transition-opacity"
-                    style={{ 
-                      left: `${landscapePositions.road.x}%`, 
-                      top: `${landscapePositions.road.y}%`, 
+                    style={{
+                      left: `${landscapePositions.road.x}%`,
+                      top: `${landscapePositions.road.y}%`,
                       transform: 'translate(-50%, -50%)',
                       opacity: landscapeActiveLayer === 12 || landscapeActiveLayer === null ? 1 : 0.12,
                       cursor: landscapeDragging === 'road' ? 'grabbing' : 'grab',
@@ -4916,15 +4916,15 @@ const WindingPathApp = () => {
 
                 {/* Popup Modals */}
                 {landscapePopup === 'principles' && (
-                  <div className="absolute bg-white border p-6 shadow-lg" style={{ 
-                    top: '50%', left: '50%', 
+                  <div className="absolute bg-white border p-6 shadow-lg" style={{
+                    top: '50%', left: '50%',
                     transform: 'translate(-50%, -50%)',
                     width: '80%',
                     maxWidth: '500px',
-                    borderColor: '#030f42', 
-                    maxHeight: '70vh', 
+                    borderColor: '#030f42',
+                    maxHeight: '70vh',
                     overflowY: 'auto',
-                    zIndex: 20 
+                    zIndex: 20
                   }}>
                     <div className="flex justify-between items-start mb-4">
                       <h3 style={{ fontFamily: 'Helvetica, Arial, sans-serif', color: '#030f42', fontSize: '13px', fontWeight: 'bold', letterSpacing: '1px' }}>
@@ -4948,15 +4948,15 @@ const WindingPathApp = () => {
                 )}
 
                 {landscapePopup === 'stop' && (
-                  <div className="absolute bg-white border p-6 shadow-lg" style={{ 
-                    top: '50%', left: '50%', 
+                  <div className="absolute bg-white border p-6 shadow-lg" style={{
+                    top: '50%', left: '50%',
                     transform: 'translate(-50%, -50%)',
                     width: '80%',
                     maxWidth: '500px',
-                    borderColor: '#030f42', 
-                    maxHeight: '70vh', 
+                    borderColor: '#030f42',
+                    maxHeight: '70vh',
                     overflowY: 'auto',
-                    zIndex: 20 
+                    zIndex: 20
                   }}>
                     <div className="flex justify-between items-start mb-4">
                       <h3 style={{ fontFamily: 'Helvetica, Arial, sans-serif', color: '#030f42', fontSize: '13px', fontWeight: 'bold', letterSpacing: '1px' }}>
@@ -4976,15 +4976,15 @@ const WindingPathApp = () => {
                 )}
 
                 {landscapePopup === 'affirmations' && (
-                  <div className="absolute bg-white border p-6 shadow-lg" style={{ 
-                    top: '50%', left: '50%', 
+                  <div className="absolute bg-white border p-6 shadow-lg" style={{
+                    top: '50%', left: '50%',
                     transform: 'translate(-50%, -50%)',
                     width: '80%',
                     maxWidth: '500px',
-                    borderColor: '#030f42', 
-                    maxHeight: '70vh', 
+                    borderColor: '#030f42',
+                    maxHeight: '70vh',
                     overflowY: 'auto',
-                    zIndex: 20 
+                    zIndex: 20
                   }}>
                     <div className="flex justify-between items-start mb-4">
                       <h3 style={{ fontFamily: 'Helvetica, Arial, sans-serif', color: '#030f42', fontSize: '13px', fontWeight: 'bold', letterSpacing: '1px' }}>
@@ -5019,15 +5019,15 @@ const WindingPathApp = () => {
 
                 {/* Week 2 - Rules of the Road popup */}
                 {landscapePopup === 'rules' && (
-                  <div className="absolute bg-white border p-6 shadow-lg" style={{ 
-                    top: '50%', left: '50%', 
+                  <div className="absolute bg-white border p-6 shadow-lg" style={{
+                    top: '50%', left: '50%',
                     transform: 'translate(-50%, -50%)',
                     width: '80%',
                     maxWidth: '500px',
-                    borderColor: '#030f42', 
-                    maxHeight: '70vh', 
+                    borderColor: '#030f42',
+                    maxHeight: '70vh',
                     overflowY: 'auto',
-                    zIndex: 20 
+                    zIndex: 20
                   }}>
                     <div className="flex justify-between items-start mb-4">
                       <h3 style={{ fontFamily: 'Helvetica, Arial, sans-serif', color: '#030f42', fontSize: '13px', fontWeight: 'bold', letterSpacing: '1px' }}>
@@ -5055,15 +5055,15 @@ const WindingPathApp = () => {
 
                 {/* Week 3 - Criticism popup (Tree 1) */}
                 {landscapePopup === 'criticism' && (
-                  <div className="absolute bg-white border p-6 shadow-lg" style={{ 
-                    top: '50%', left: '50%', 
+                  <div className="absolute bg-white border p-6 shadow-lg" style={{
+                    top: '50%', left: '50%',
                     transform: 'translate(-50%, -50%)',
                     width: '80%',
                     maxWidth: '500px',
-                    borderColor: '#030f42', 
-                    maxHeight: '70vh', 
+                    borderColor: '#030f42',
+                    maxHeight: '70vh',
                     overflowY: 'auto',
-                    zIndex: 20 
+                    zIndex: 20
                   }}>
                     <div className="flex justify-between items-start mb-4">
                       <h3 style={{ fontFamily: 'Helvetica, Arial, sans-serif', color: '#030f42', fontSize: '13px', fontWeight: 'bold', letterSpacing: '1px' }}>
@@ -5087,15 +5087,15 @@ const WindingPathApp = () => {
 
                 {/* Week 3 - Synchronicity popup (Tree 2) */}
                 {landscapePopup === 'synchronicity' && (
-                  <div className="absolute bg-white border p-6 shadow-lg" style={{ 
-                    top: '50%', left: '50%', 
+                  <div className="absolute bg-white border p-6 shadow-lg" style={{
+                    top: '50%', left: '50%',
                     transform: 'translate(-50%, -50%)',
                     width: '80%',
                     maxWidth: '520px',
-                    borderColor: '#030f42', 
-                    maxHeight: '75vh', 
+                    borderColor: '#030f42',
+                    maxHeight: '75vh',
                     overflowY: 'auto',
-                    zIndex: 20 
+                    zIndex: 20
                   }}>
                     <div className="flex justify-between items-start mb-4">
                       <h3 style={{ fontFamily: 'Helvetica, Arial, sans-serif', color: '#030f42', fontSize: '13px', fontWeight: 'bold', letterSpacing: '1px' }}>
@@ -5124,7 +5124,7 @@ const WindingPathApp = () => {
                           }}
                           placeholder={`Experience ${num}...`}
                           className="w-full px-3 py-2 border text-sm focus:outline-none"
-                          style={{ 
+                          style={{
                             fontFamily: 'Helvetica, Arial, sans-serif',
                             borderColor: '#030f42',
                             color: '#030f42',
@@ -5137,15 +5137,15 @@ const WindingPathApp = () => {
 
                 {/* Week 3 - Questions popup (Tree 3) */}
                 {landscapePopup === 'questions' && (
-                  <div className="absolute bg-white border p-6 shadow-lg" style={{ 
-                    top: '50%', left: '50%', 
+                  <div className="absolute bg-white border p-6 shadow-lg" style={{
+                    top: '50%', left: '50%',
                     transform: 'translate(-50%, -50%)',
                     width: '85%',
                     maxWidth: '550px',
-                    borderColor: '#030f42', 
-                    maxHeight: '80vh', 
+                    borderColor: '#030f42',
+                    maxHeight: '80vh',
                     overflowY: 'auto',
-                    zIndex: 20 
+                    zIndex: 20
                   }}>
                     <div className="flex justify-between items-start mb-4">
                       <h3 style={{ fontFamily: 'Helvetica, Arial, sans-serif', color: '#030f42', fontSize: '13px', fontWeight: 'bold', letterSpacing: '1px' }}>
@@ -5189,7 +5189,7 @@ const WindingPathApp = () => {
                                 storageSet('windingPath:landscapeResponses', newResponses);
                               }}
                               className="border-b border-current bg-transparent focus:outline-none"
-                              style={{ 
+                              style={{
                                 width: '100%',
                                 maxWidth: '200px',
                                 color: '#030f42',
@@ -5204,15 +5204,15 @@ const WindingPathApp = () => {
 
                 {/* Week 4 - Hobbies/Lists popup (Bird 1) */}
                 {landscapePopup === 'hobbies' && (
-                  <div className="absolute bg-white border p-6 shadow-lg" style={{ 
-                    top: '50%', left: '50%', 
+                  <div className="absolute bg-white border p-6 shadow-lg" style={{
+                    top: '50%', left: '50%',
                     transform: 'translate(-50%, -50%)',
                     width: '85%',
                     maxWidth: '520px',
-                    borderColor: '#030f42', 
-                    maxHeight: '75vh', 
+                    borderColor: '#030f42',
+                    maxHeight: '75vh',
                     overflowY: 'auto',
-                    zIndex: 20 
+                    zIndex: 20
                   }}>
                     <div className="flex justify-between items-start mb-4">
                       <h3 style={{ fontFamily: 'Helvetica, Arial, sans-serif', color: '#030f42', fontSize: '13px', fontWeight: 'bold', letterSpacing: '1px' }}>
@@ -5238,7 +5238,7 @@ const WindingPathApp = () => {
                       placeholder="Write your lists here..."
                       className="w-full px-3 py-3 border text-sm focus:outline-none"
                       rows={8}
-                      style={{ 
+                      style={{
                         fontFamily: 'Helvetica, Arial, sans-serif',
                         borderColor: '#030f42',
                         color: '#030f42',
@@ -5250,15 +5250,15 @@ const WindingPathApp = () => {
 
                 {/* Week 4 - Kriya popup (Bird 2) */}
                 {landscapePopup === 'kriya' && (
-                  <div className="absolute bg-white border p-6 shadow-lg" style={{ 
-                    top: '50%', left: '50%', 
+                  <div className="absolute bg-white border p-6 shadow-lg" style={{
+                    top: '50%', left: '50%',
                     transform: 'translate(-50%, -50%)',
                     width: '85%',
                     maxWidth: '520px',
-                    borderColor: '#030f42', 
-                    maxHeight: '75vh', 
+                    borderColor: '#030f42',
+                    maxHeight: '75vh',
                     overflowY: 'auto',
-                    zIndex: 20 
+                    zIndex: 20
                   }}>
                     <div className="flex justify-between items-start mb-4">
                       <h3 style={{ fontFamily: 'Helvetica, Arial, sans-serif', color: '#030f42', fontSize: '13px', fontWeight: 'bold', letterSpacing: '1px' }}>
@@ -5290,15 +5290,15 @@ const WindingPathApp = () => {
 
                 {/* Week 4 - Reading Deprivation popup (Bird 3) */}
                 {landscapePopup === 'deprivation' && (
-                  <div className="absolute bg-white border p-6 shadow-lg" style={{ 
-                    top: '50%', left: '50%', 
+                  <div className="absolute bg-white border p-6 shadow-lg" style={{
+                    top: '50%', left: '50%',
                     transform: 'translate(-50%, -50%)',
                     width: '85%',
                     maxWidth: '550px',
-                    borderColor: '#030f42', 
-                    maxHeight: '80vh', 
+                    borderColor: '#030f42',
+                    maxHeight: '80vh',
                     overflowY: 'auto',
-                    zIndex: 20 
+                    zIndex: 20
                   }}>
                     <div className="flex justify-between items-start mb-4">
                       <h3 style={{ fontFamily: 'Helvetica, Arial, sans-serif', color: '#030f42', fontSize: '13px', fontWeight: 'bold', letterSpacing: '1px' }}>
@@ -5344,15 +5344,15 @@ const WindingPathApp = () => {
 
                 {/* Week 4 - Prayer popup (Bird 4) - editable */}
                 {landscapePopup === 'prayer' && (
-                  <div className="absolute bg-white border p-6 shadow-lg" style={{ 
-                    top: '50%', left: '50%', 
+                  <div className="absolute bg-white border p-6 shadow-lg" style={{
+                    top: '50%', left: '50%',
                     transform: 'translate(-50%, -50%)',
                     width: '85%',
                     maxWidth: '540px',
-                    borderColor: '#030f42', 
-                    maxHeight: '85vh', 
+                    borderColor: '#030f42',
+                    maxHeight: '85vh',
                     overflowY: 'auto',
-                    zIndex: 20 
+                    zIndex: 20
                   }}>
                     <div className="flex justify-between items-start mb-2">
                       <h3 style={{ fontFamily: 'Helvetica, Arial, sans-serif', color: '#030f42', fontSize: '13px', fontWeight: 'bold', letterSpacing: '1px' }}>
@@ -5403,7 +5403,7 @@ Help us to create as an act of worship to you.`}
                       }}
                       className="w-full px-4 py-4 border text-sm focus:outline-none"
                       rows={20}
-                      style={{ 
+                      style={{
                         fontFamily: 'Helvetica, Arial, sans-serif',
                         borderColor: '#030f42',
                         color: '#030f42',
@@ -5417,15 +5417,15 @@ Help us to create as an act of worship to you.`}
 
                 {/* Week 5 - Virtue Trap Quiz popup (Cloud 1) */}
                 {landscapePopup === 'virtutrap' && (
-                  <div className="absolute bg-white border p-6 shadow-lg" style={{ 
-                    top: '50%', left: '50%', 
+                  <div className="absolute bg-white border p-6 shadow-lg" style={{
+                    top: '50%', left: '50%',
                     transform: 'translate(-50%, -50%)',
                     width: '90%',
                     maxWidth: '560px',
-                    borderColor: '#030f42', 
-                    maxHeight: '85vh', 
+                    borderColor: '#030f42',
+                    maxHeight: '85vh',
                     overflowY: 'auto',
-                    zIndex: 20 
+                    zIndex: 20
                   }}>
                     <div className="flex justify-between items-start mb-4">
                       <h3 style={{ fontFamily: 'Helvetica, Arial, sans-serif', color: '#030f42', fontSize: '13px', fontWeight: 'bold', letterSpacing: '1px' }}>
@@ -5459,7 +5459,7 @@ Help us to create as an act of worship to you.`}
                                 storageSet('windingPath:landscapeResponses', newResponses);
                               }}
                               className="border-b border-current bg-transparent focus:outline-none"
-                              style={{ 
+                              style={{
                                 width: '100%',
                                 maxWidth: '250px',
                                 color: '#030f42',
@@ -5482,15 +5482,15 @@ Help us to create as an act of worship to you.`}
 
                 {/* Week 5 - Forbidden Joys popup (Cloud 2) */}
                 {landscapePopup === 'forbidden' && (
-                  <div className="absolute bg-white border p-6 shadow-lg" style={{ 
-                    top: '50%', left: '50%', 
+                  <div className="absolute bg-white border p-6 shadow-lg" style={{
+                    top: '50%', left: '50%',
                     transform: 'translate(-50%, -50%)',
                     width: '85%',
                     maxWidth: '520px',
-                    borderColor: '#030f42', 
-                    maxHeight: '80vh', 
+                    borderColor: '#030f42',
+                    maxHeight: '80vh',
                     overflowY: 'auto',
-                    zIndex: 20 
+                    zIndex: 20
                   }}>
                     <div className="flex justify-between items-start mb-2">
                       <h3 style={{ fontFamily: 'Helvetica, Arial, sans-serif', color: '#030f42', fontSize: '13px', fontWeight: 'bold', letterSpacing: '1px' }}>
@@ -5514,7 +5514,7 @@ Help us to create as an act of worship to you.`}
                               storageSet('windingPath:landscapeResponses', newResponses);
                             }}
                             className="flex-1 px-2 py-1 border-b bg-transparent focus:outline-none"
-                            style={{ 
+                            style={{
                               fontFamily: 'Helvetica, Arial, sans-serif',
                               borderColor: '#030f42',
                               color: '#030f42',
@@ -5529,15 +5529,15 @@ Help us to create as an act of worship to you.`}
 
                 {/* Week 5 - Wishes popup (Cloud 3) */}
                 {landscapePopup === 'wishes' && (
-                  <div className="absolute bg-white border p-6 shadow-lg" style={{ 
-                    top: '50%', left: '50%', 
+                  <div className="absolute bg-white border p-6 shadow-lg" style={{
+                    top: '50%', left: '50%',
                     transform: 'translate(-50%, -50%)',
                     width: '90%',
                     maxWidth: '560px',
-                    borderColor: '#030f42', 
-                    maxHeight: '85vh', 
+                    borderColor: '#030f42',
+                    maxHeight: '85vh',
                     overflowY: 'auto',
-                    zIndex: 20 
+                    zIndex: 20
                   }}>
                     <div className="flex justify-between items-start mb-4">
                       <h3 style={{ fontFamily: 'Helvetica, Arial, sans-serif', color: '#030f42', fontSize: '13px', fontWeight: 'bold', letterSpacing: '1px' }}>
@@ -5559,7 +5559,7 @@ Help us to create as an act of worship to you.`}
                               storageSet('windingPath:landscapeResponses', newResponses);
                             }}
                             className="flex-1 border-b bg-transparent focus:outline-none"
-                            style={{ 
+                            style={{
                               borderColor: '#030f42',
                               color: '#030f42',
                             }}
@@ -5578,7 +5578,7 @@ Help us to create as an act of worship to you.`}
                             storageSet('windingPath:landscapeResponses', newResponses);
                           }}
                           className="flex-1 border-b bg-transparent focus:outline-none"
-                          style={{ 
+                          style={{
                             borderColor: '#030f42',
                             color: '#030f42',
                           }}
@@ -5590,15 +5590,15 @@ Help us to create as an act of worship to you.`}
 
                 {/* Week 6 - Money beliefs popup (House) */}
                 {landscapePopup === 'money' && (
-                  <div className="absolute bg-white border p-6 shadow-lg" style={{ 
-                    top: '50%', left: '50%', 
+                  <div className="absolute bg-white border p-6 shadow-lg" style={{
+                    top: '50%', left: '50%',
                     transform: 'translate(-50%, -50%)',
                     width: '90%',
                     maxWidth: '580px',
-                    borderColor: '#030f42', 
-                    maxHeight: '85vh', 
+                    borderColor: '#030f42',
+                    maxHeight: '85vh',
                     overflowY: 'auto',
-                    zIndex: 20 
+                    zIndex: 20
                   }}>
                     <div className="flex justify-between items-start mb-4">
                       <h3 style={{ fontFamily: 'Helvetica, Arial, sans-serif', color: '#030f42', fontSize: '13px', fontWeight: 'bold', letterSpacing: '1px' }}>
@@ -5645,7 +5645,7 @@ Help us to create as an act of worship to you.`}
                                 storageSet('windingPath:landscapeResponses', newResponses);
                               }}
                               className="border-b border-current bg-transparent focus:outline-none"
-                              style={{ 
+                              style={{
                                 width: '100%',
                                 maxWidth: '220px',
                                 color: '#030f42',
@@ -5660,15 +5660,15 @@ Help us to create as an act of worship to you.`}
 
                 {/* Week 7 - Perfectionism popup (Wind 1) */}
                 {landscapePopup === 'perfectionism' && (
-                  <div className="absolute bg-white border p-6 shadow-lg" style={{ 
-                    top: '50%', left: '50%', 
+                  <div className="absolute bg-white border p-6 shadow-lg" style={{
+                    top: '50%', left: '50%',
                     transform: 'translate(-50%, -50%)',
                     width: '85%',
                     maxWidth: '500px',
-                    borderColor: '#030f42', 
-                    maxHeight: '75vh', 
+                    borderColor: '#030f42',
+                    maxHeight: '75vh',
                     overflowY: 'auto',
-                    zIndex: 20 
+                    zIndex: 20
                   }}>
                     <div className="flex justify-between items-start mb-4">
                       <h3 style={{ fontFamily: 'Helvetica, Arial, sans-serif', color: '#030f42', fontSize: '13px', fontWeight: 'bold', letterSpacing: '1px' }}>
@@ -5693,7 +5693,7 @@ Help us to create as an act of worship to you.`}
                       placeholder="Write freely..."
                       className="w-full px-3 py-3 border text-sm focus:outline-none"
                       rows={6}
-                      style={{ 
+                      style={{
                         fontFamily: 'Helvetica, Arial, sans-serif',
                         borderColor: '#030f42',
                         color: '#030f42',
@@ -5705,15 +5705,15 @@ Help us to create as an act of worship to you.`}
 
                 {/* Week 7 - Jealousy Map popup (Wind 2) */}
                 {landscapePopup === 'jealousy' && (
-                  <div className="absolute bg-white border p-6 shadow-lg" style={{ 
-                    top: '50%', left: '50%', 
+                  <div className="absolute bg-white border p-6 shadow-lg" style={{
+                    top: '50%', left: '50%',
                     transform: 'translate(-50%, -50%)',
                     width: '95%',
                     maxWidth: '700px',
-                    borderColor: '#030f42', 
-                    maxHeight: '85vh', 
+                    borderColor: '#030f42',
+                    maxHeight: '85vh',
                     overflowY: 'auto',
-                    zIndex: 20 
+                    zIndex: 20
                   }}>
                     <div className="flex justify-between items-start mb-4">
                       <h3 style={{ fontFamily: 'Helvetica, Arial, sans-serif', color: '#030f42', fontSize: '13px', fontWeight: 'bold', letterSpacing: '1px' }}>
@@ -5773,15 +5773,15 @@ Help us to create as an act of worship to you.`}
 
                 {/* Week 7 - Childhood losses popup (Wind 3) */}
                 {landscapePopup === 'childhood' && (
-                  <div className="absolute bg-white border p-6 shadow-lg" style={{ 
-                    top: '50%', left: '50%', 
+                  <div className="absolute bg-white border p-6 shadow-lg" style={{
+                    top: '50%', left: '50%',
                     transform: 'translate(-50%, -50%)',
                     width: '90%',
                     maxWidth: '560px',
-                    borderColor: '#030f42', 
-                    maxHeight: '85vh', 
+                    borderColor: '#030f42',
+                    maxHeight: '85vh',
                     overflowY: 'auto',
-                    zIndex: 20 
+                    zIndex: 20
                   }}>
                     <div className="flex justify-between items-start mb-4">
                       <h3 style={{ fontFamily: 'Helvetica, Arial, sans-serif', color: '#030f42', fontSize: '13px', fontWeight: 'bold', letterSpacing: '1px' }}>
@@ -5815,7 +5815,7 @@ Help us to create as an act of worship to you.`}
                                 storageSet('windingPath:landscapeResponses', newResponses);
                               }}
                               className="border-b border-current bg-transparent focus:outline-none"
-                              style={{ 
+                              style={{
                                 width: '100%',
                                 maxWidth: '220px',
                                 color: '#030f42',
@@ -5830,15 +5830,15 @@ Help us to create as an act of worship to you.`}
 
                 {/* Week 7 - Gains popup (Wind 4) */}
                 {landscapePopup === 'gains' && (
-                  <div className="absolute bg-white border p-6 shadow-lg" style={{ 
-                    top: '50%', left: '50%', 
+                  <div className="absolute bg-white border p-6 shadow-lg" style={{
+                    top: '50%', left: '50%',
                     transform: 'translate(-50%, -50%)',
                     width: '90%',
                     maxWidth: '560px',
-                    borderColor: '#030f42', 
-                    maxHeight: '85vh', 
+                    borderColor: '#030f42',
+                    maxHeight: '85vh',
                     overflowY: 'auto',
-                    zIndex: 20 
+                    zIndex: 20
                   }}>
                     <div className="flex justify-between items-start mb-4">
                       <h3 style={{ fontFamily: 'Helvetica, Arial, sans-serif', color: '#030f42', fontSize: '13px', fontWeight: 'bold', letterSpacing: '1px' }}>
@@ -5872,7 +5872,7 @@ Help us to create as an act of worship to you.`}
                                 storageSet('windingPath:landscapeResponses', newResponses);
                               }}
                               className="border-b border-current bg-transparent focus:outline-none"
-                              style={{ 
+                              style={{
                                 width: '100%',
                                 maxWidth: '220px',
                                 color: '#030f42',
@@ -5887,15 +5887,15 @@ Help us to create as an act of worship to you.`}
 
                 {/* Week 8 - Art intro popup (Deer 1) */}
                 {landscapePopup === 'artintro' && (
-                  <div className="absolute bg-white border p-6 shadow-lg" style={{ 
-                    top: '50%', left: '50%', 
+                  <div className="absolute bg-white border p-6 shadow-lg" style={{
+                    top: '50%', left: '50%',
                     transform: 'translate(-50%, -50%)',
                     width: '85%',
                     maxWidth: '520px',
-                    borderColor: '#030f42', 
-                    maxHeight: '80vh', 
+                    borderColor: '#030f42',
+                    maxHeight: '80vh',
                     overflowY: 'auto',
-                    zIndex: 20 
+                    zIndex: 20
                   }}>
                     <div className="flex justify-between items-start mb-4">
                       <h3 style={{ fontFamily: 'Helvetica, Arial, sans-serif', color: '#030f42', fontSize: '13px', fontWeight: 'bold', letterSpacing: '1px' }}>
@@ -5926,15 +5926,15 @@ Help us to create as an act of worship to you.`}
 
                 {/* Week 8 - Parents/Teachers popup (Deer 2) */}
                 {landscapePopup === 'parents' && (
-                  <div className="absolute bg-white border p-6 shadow-lg" style={{ 
-                    top: '50%', left: '50%', 
+                  <div className="absolute bg-white border p-6 shadow-lg" style={{
+                    top: '50%', left: '50%',
                     transform: 'translate(-50%, -50%)',
                     width: '92%',
                     maxWidth: '600px',
-                    borderColor: '#030f42', 
-                    maxHeight: '85vh', 
+                    borderColor: '#030f42',
+                    maxHeight: '85vh',
                     overflowY: 'auto',
-                    zIndex: 20 
+                    zIndex: 20
                   }}>
                     <div className="flex justify-between items-start mb-4">
                       <h3 style={{ fontFamily: 'Helvetica, Arial, sans-serif', color: '#030f42', fontSize: '13px', fontWeight: 'bold', letterSpacing: '1px' }}>
@@ -6045,15 +6045,15 @@ Help us to create as an act of worship to you.`}
 
                 {/* Week 8 - Affirmations popup (Deer 3) */}
                 {landscapePopup === 'affirmations' && (
-                  <div className="absolute bg-white border p-6 shadow-lg" style={{ 
-                    top: '50%', left: '50%', 
+                  <div className="absolute bg-white border p-6 shadow-lg" style={{
+                    top: '50%', left: '50%',
                     transform: 'translate(-50%, -50%)',
                     width: '85%',
                     maxWidth: '500px',
-                    borderColor: '#030f42', 
-                    maxHeight: '80vh', 
+                    borderColor: '#030f42',
+                    maxHeight: '80vh',
                     overflowY: 'auto',
-                    zIndex: 20 
+                    zIndex: 20
                   }}>
                     <div className="flex justify-between items-start mb-4">
                       <h3 style={{ fontFamily: 'Helvetica, Arial, sans-serif', color: '#030f42', fontSize: '13px', fontWeight: 'bold', letterSpacing: '1px' }}>
@@ -6086,15 +6086,15 @@ Help us to create as an act of worship to you.`}
 
                 {/* Week 9 - Block-buster popup (Sun) */}
                 {landscapePopup === 'blockbuster' && (
-                  <div className="absolute bg-white border p-6 shadow-lg" style={{ 
-                    top: '50%', left: '50%', 
+                  <div className="absolute bg-white border p-6 shadow-lg" style={{
+                    top: '50%', left: '50%',
                     transform: 'translate(-50%, -50%)',
                     width: '90%',
                     maxWidth: '580px',
-                    borderColor: '#030f42', 
-                    maxHeight: '85vh', 
+                    borderColor: '#030f42',
+                    maxHeight: '85vh',
                     overflowY: 'auto',
-                    zIndex: 20 
+                    zIndex: 20
                   }}>
                     <div className="flex justify-between items-start mb-4">
                       <h3 style={{ fontFamily: 'Helvetica, Arial, sans-serif', color: '#030f42', fontSize: '13px', fontWeight: 'bold', letterSpacing: '1px' }}>
@@ -6193,15 +6193,15 @@ Help us to create as an act of worship to you.`}
 
                 {/* Week 10 - Blocking popup (Moon 1) */}
                 {landscapePopup === 'blocking' && (
-                  <div className="absolute bg-white border p-6 shadow-lg" style={{ 
-                    top: '50%', left: '50%', 
+                  <div className="absolute bg-white border p-6 shadow-lg" style={{
+                    top: '50%', left: '50%',
                     transform: 'translate(-50%, -50%)',
                     width: '88%',
                     maxWidth: '540px',
-                    borderColor: '#030f42', 
-                    maxHeight: '85vh', 
+                    borderColor: '#030f42',
+                    maxHeight: '85vh',
                     overflowY: 'auto',
-                    zIndex: 20 
+                    zIndex: 20
                   }}>
                     <div className="flex justify-between items-start mb-4">
                       <h3 style={{ fontFamily: 'Helvetica, Arial, sans-serif', color: '#030f42', fontSize: '13px', fontWeight: 'bold', letterSpacing: '1px' }}>
@@ -6238,15 +6238,15 @@ Help us to create as an act of worship to you.`}
 
                 {/* Week 11 - Artist statement popup (Walker 1) */}
                 {landscapePopup === 'artiststatement' && (
-                  <div className="absolute bg-white border p-6 shadow-lg" style={{ 
-                    top: '50%', left: '50%', 
+                  <div className="absolute bg-white border p-6 shadow-lg" style={{
+                    top: '50%', left: '50%',
                     transform: 'translate(-50%, -50%)',
                     width: '88%',
                     maxWidth: '540px',
-                    borderColor: '#030f42', 
-                    maxHeight: '85vh', 
+                    borderColor: '#030f42',
+                    maxHeight: '85vh',
                     overflowY: 'auto',
-                    zIndex: 20 
+                    zIndex: 20
                   }}>
                     <div className="flex justify-between items-start mb-4">
                       <h3 style={{ fontFamily: 'Helvetica, Arial, sans-serif', color: '#030f42', fontSize: '13px', fontWeight: 'bold', letterSpacing: '1px' }}>
@@ -6279,15 +6279,15 @@ Help us to create as an act of worship to you.`}
 
                 {/* Week 11 - Spiritual corner popup (Walker 2) */}
                 {landscapePopup === 'spiritual' && (
-                  <div className="absolute bg-white border p-6 shadow-lg" style={{ 
-                    top: '50%', left: '50%', 
+                  <div className="absolute bg-white border p-6 shadow-lg" style={{
+                    top: '50%', left: '50%',
                     transform: 'translate(-50%, -50%)',
                     width: '88%',
                     maxWidth: '540px',
-                    borderColor: '#030f42', 
-                    maxHeight: '85vh', 
+                    borderColor: '#030f42',
+                    maxHeight: '85vh',
                     overflowY: 'auto',
-                    zIndex: 20 
+                    zIndex: 20
                   }}>
                     <div className="flex justify-between items-start mb-4">
                       <h3 style={{ fontFamily: 'Helvetica, Arial, sans-serif', color: '#030f42', fontSize: '13px', fontWeight: 'bold', letterSpacing: '1px' }}>
@@ -6320,15 +6320,15 @@ Help us to create as an act of worship to you.`}
 
                 {/* Week 12 - Creativity Contract popup (Road) */}
                 {landscapePopup === 'contract' && (
-                  <div className="absolute bg-white border p-6 shadow-lg" style={{ 
-                    top: '50%', left: '50%', 
+                  <div className="absolute bg-white border p-6 shadow-lg" style={{
+                    top: '50%', left: '50%',
                     transform: 'translate(-50%, -50%)',
                     width: '92%',
                     maxWidth: '580px',
-                    borderColor: '#030f42', 
-                    maxHeight: '88vh', 
+                    borderColor: '#030f42',
+                    maxHeight: '88vh',
                     overflowY: 'auto',
-                    zIndex: 20 
+                    zIndex: 20
                   }}>
                     <div className="flex justify-between items-start mb-4">
                       <h3 style={{ fontFamily: 'Helvetica, Arial, sans-serif', color: '#030f42', fontSize: '13px', fontWeight: 'bold', letterSpacing: '1px' }}>
@@ -6351,11 +6351,11 @@ Help us to create as an act of worship to you.`}
                           style={{ width: '150px', color: '#030f42' }}
                         />.
                       </p>
-                      
+
                       <p className="mb-4">
                         I am a recovering creative person. To further my growth and my joy, I now commit myself to the following self-nurturing plans:
                       </p>
-                      
+
                       <p className="mb-4">
                         The pages have been an important part of my self-nurturing and self-discovery. I,{' '}
                         <input
@@ -6370,7 +6370,7 @@ Help us to create as an act of worship to you.`}
                           style={{ width: '120px', color: '#030f42' }}
                         />, hereby commit myself to continuing to work with them for the next ninety days.
                       </p>
-                      
+
                       <p className="mb-4">
                         Pit stops have been integral to my growth in self-love and my deepening joy in living. I,{' '}
                         <input
@@ -6385,7 +6385,7 @@ Help us to create as an act of worship to you.`}
                           style={{ width: '120px', color: '#030f42' }}
                         />, am willing to commit to another ninety days of weekly artist's dates for self-care.
                       </p>
-                      
+
                       <p className="mb-4">
                         In the course of following the artist's way and healing my artist within, I have discovered that I have a number of creative interests. While I hope to develop many of them, my specific commitment for the next ninety days is to allow myself to more fully explore{' '}
                         <input
@@ -6400,7 +6400,7 @@ Help us to create as an act of worship to you.`}
                           style={{ width: '200px', color: '#030f42' }}
                         />.
                       </p>
-                      
+
                       <p className="mb-4">
                         My concrete commitment to a plan of action is a critical part of nurturing my artist. For the next ninety days, my planned, self-nurturing creative action plan is{' '}
                         <input
@@ -6415,7 +6415,7 @@ Help us to create as an act of worship to you.`}
                           style={{ width: '200px', color: '#030f42' }}
                         />.
                       </p>
-                      
+
                       <p className="mb-4">
                         I have chosen{' '}
                         <input
@@ -6441,7 +6441,7 @@ Help us to create as an act of worship to you.`}
                           style={{ width: '120px', color: '#030f42' }}
                         />{' '}as my creative backup. I am committed to a weekly phone check-in.
                       </p>
-                      
+
                       <p className="mb-6">
                         I have made the above commitments and will begin my new commitment on{' '}
                         <input
@@ -6456,7 +6456,7 @@ Help us to create as an act of worship to you.`}
                           style={{ width: '140px', color: '#030f42' }}
                         />.
                       </p>
-                      
+
                       {/* Signature line */}
                       <div className="mt-8 pt-4 border-t" style={{ borderColor: '#030f42' }}>
                         <div className="flex items-end gap-4">
@@ -6505,7 +6505,7 @@ Help us to create as an act of worship to you.`}
           {/* User Profile Page */}
           {currentPage === 'profile' && (
             <div>
-              <h2 
+              <h2
                 className="text-3xl mb-6"
                 style={{ fontFamily: 'Helvetica, Arial, sans-serif', color: '#030f42', fontWeight: 'normal' }}
               >
@@ -6523,7 +6523,7 @@ Help us to create as an act of worship to you.`}
                       className={`relative inline-flex h-6 w-11 items-center rounded-full transition-all ${
                         emailRemindersEnabled ? '' : ''
                       }`}
-                      style={{ 
+                      style={{
                         backgroundColor: emailRemindersEnabled ? '#030f42' : '#d1d5db',
                       }}
                     >
@@ -6615,7 +6615,7 @@ Help us to create as an act of worship to you.`}
                     <button
                       onClick={handleRestartWeek}
                       className="w-full px-4 py-3 border text-left hover:opacity-70 transition-all"
-                      style={{ 
+                      style={{
                         fontFamily: 'Helvetica, Arial, sans-serif',
                         borderColor: '#030f42',
                         color: '#030f42'
@@ -6627,7 +6627,7 @@ Help us to create as an act of worship to you.`}
                     <button
                       onClick={handleRestartProgram}
                       className="w-full px-4 py-3 border text-left hover:opacity-70 transition-all"
-                      style={{ 
+                      style={{
                         fontFamily: 'Helvetica, Arial, sans-serif',
                         borderColor: '#030f42',
                         color: '#030f42'
@@ -6639,7 +6639,7 @@ Help us to create as an act of worship to you.`}
                     <button
                       onClick={() => setShowResetConfirm(true)}
                       className="w-full px-4 py-3 border text-left hover:opacity-70 transition-all"
-                      style={{ 
+                      style={{
                         fontFamily: 'Helvetica, Arial, sans-serif',
                         borderColor: '#030f42',
                         color: '#030f42'
@@ -6731,14 +6731,14 @@ Help us to create as an act of worship to you.`}
             <div className="bg-white border max-w-md w-full p-8" style={{ borderColor: '#030f42' }}>
               <div className="flex gap-3 mb-4">
                 <AlertCircle className="w-6 h-6 flex-shrink-0" style={{ color: '#030f42' }} />
-                <h2 
+                <h2
                   className="text-xl font-bold"
                   style={{ fontFamily: 'Helvetica, Arial, sans-serif', color: '#030f42' }}
                 >
                   Permanently Delete Everything?
                 </h2>
               </div>
-              
+
               <p className="mb-6" style={{ fontFamily: 'Helvetica, Arial, sans-serif', color: '#030f42', opacity: 0.8 }}>
                 This will permanently delete all your data and return you to the beginning of the program. This action cannot be undone.
               </p>
@@ -6747,7 +6747,7 @@ Help us to create as an act of worship to you.`}
                 <button
                   onClick={() => setShowResetConfirm(false)}
                   className="flex-1 px-4 py-3 border hover:opacity-70 transition-all"
-                  style={{ 
+                  style={{
                     fontFamily: 'Helvetica, Arial, sans-serif',
                     borderColor: '#030f42',
                     color: '#030f42'
@@ -6758,7 +6758,7 @@ Help us to create as an act of worship to you.`}
                 <button
                   onClick={handleFullReset}
                   className="flex-1 px-4 py-3 text-white hover:opacity-80 transition-all"
-                  style={{ 
+                  style={{
                     fontFamily: 'Helvetica, Arial, sans-serif',
                     backgroundColor: '#030f42'
                   }}
