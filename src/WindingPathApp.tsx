@@ -65,6 +65,16 @@ const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBh
  * - status: text (e.g., 'pending', 'sent', 'failed')
  * - created_at: timestamp with time zone (default now())
  *
+ * Table: weekly_prompt_responses
+ * - id: uuid (primary key, auto-generated)
+ * - user_id: uuid (foreign key to users.id)
+ * - week: integer
+ * - prompt_number: integer
+ * - response: text (nullable - some prompts don't have text boxes)
+ * - completed: boolean
+ * - created_at: timestamp with time zone (default now())
+ * - updated_at: timestamp with time zone (default now())
+ * - UNIQUE(user_id, week, prompt_number)
  * ============================================================================
  */
 
@@ -1405,7 +1415,7 @@ const CollageEditor = ({ storageSet, archiveData, setArchiveData }) => {
 
 // Main App Component
 // Weekly Prompts Component
-const WeeklyPrompts = ({ currentWeek, storageSet, checkInDay, userEmail }) => {
+const WeeklyPrompts = ({ currentWeek, storageSet, checkInDay, userEmail, saveToSupabase}) => {
   const [expandedPrompt, setExpandedPrompt] = useState(null);
   const [promptResponses, setPromptResponses] = useState({});
 
@@ -1473,11 +1483,16 @@ const WeeklyPrompts = ({ currentWeek, storageSet, checkInDay, userEmail }) => {
     },
   };
 
-  const handleConfirm = (promptNumber) => {
+  const handleConfirm = async (promptNumber) => {
     setPromptResponses({
       ...promptResponses,
       [promptNumber]: { completed: true, timestamp: new Date().toISOString() },
     });
+
+    if (saveToSupabase) {
+      await saveToSupabase(currentWeek, promptNumber, null, true);
+    }
+
     setExpandedPrompt(null);
   };
 
@@ -1493,8 +1508,13 @@ const WeeklyPrompts = ({ currentWeek, storageSet, checkInDay, userEmail }) => {
       [promptNumber]: response,
     });
 
-    // Save to storage
+    // Save to local storage
     await storageSet(`windingPath:weeklyPrompt:w${currentWeek}-p${promptNumber}`, response);
+
+    // ✅ ADD THIS: Save to Supabase
+    if (saveToSupabase) {
+      await saveToSupabase(currentWeek, promptNumber, text, true);
+    }
 
     // If this is a mailable prompt (5), schedule it to send in 3 days
     if (promptNumber === 5 && userEmail) {
@@ -1508,6 +1528,9 @@ const WeeklyPrompts = ({ currentWeek, storageSet, checkInDay, userEmail }) => {
         scheduledSend: true,
       });
     }
+
+    setExpandedPrompt(null);
+  };
 
     setExpandedPrompt(null);
   };
@@ -2070,6 +2093,36 @@ const WindingPathApp = () => {
       }
     } catch (err) {
       console.error('Supabase landscape error:', err);
+    }
+  };
+  // Save weekly prompt response to Supabase
+  const saveWeeklyPromptToSupabase = async (week, promptNumber, response, completed = true) => {
+    if (!supabaseRef.current || !supabaseUserId) {
+      console.warn('Cannot save weekly prompt: Supabase not initialized or no user ID');
+      return;
+    }
+
+    try {
+      const { data, error } = await supabaseRef.current
+        .from('weekly_prompt_responses')
+        .upsert({
+          user_id: supabaseUserId,
+          week: week,
+          prompt_number: promptNumber,
+          response: response || null,
+          completed: completed,
+          updated_at: new Date().toISOString()
+        }, {
+          onConflict: 'user_id,week,prompt_number'
+        });
+
+      if (error) {
+        console.error('Error saving weekly prompt response:', error);
+      } else {
+        console.log(`Weekly prompt W${week}-P${promptNumber} saved to Supabase`);
+      }
+    } catch (err) {
+      console.error('Supabase weekly prompt error:', err);
     }
   };
 
@@ -3814,6 +3867,13 @@ const WindingPathApp = () => {
 
                       alert('Check-in saved successfully!');
                     }}
+                    <WeeklyPrompts
+  currentWeek={currentWeek}
+  storageSet={storageSet}
+  checkInDay={checkInDay}
+  userEmail={userEmail}
+  saveToSupabase={saveWeeklyPromptToSupabase}  // ADD THIS LINE
+/>
                     style={{
                       fontFamily: 'Helvetica, Arial, sans-serif',
                       backgroundColor: '#030f42',
