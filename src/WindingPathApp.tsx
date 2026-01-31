@@ -531,7 +531,7 @@ const ClocktowerArchive = ({ archiveData = {} }) => {
                                   }}
                                 >
                                   <img
-                                    src={src/Images/Julia.src}
+                                    src="/julia.jpg"
                                     alt=""
                                     style={{
                                       width: '100%',
@@ -669,7 +669,7 @@ const ClocktowerArchive = ({ archiveData = {} }) => {
 
 
 // Collage Editor Component
-const CollageEditor = ({ storageSet, archiveData, setArchiveData }) => {
+const CollageEditor = ({ storageSet, archiveData, setArchiveData, saveCollageToSupabase }) => {
   const [items, setItems] = useState([
     { id: 1, src: 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAYABgAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/2wBDAQkJCQwLDBgNDRgyIRwhMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjL/wAARCAEsASwDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWm5ybnJ2eoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD3+iiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigD/2Q==', x: 50, y: 50, rotation: 0, scaleX: 1, scaleY: 1, zIndex: 1, width: 200, height: 200 },
   ]);
@@ -728,6 +728,11 @@ const CollageEditor = ({ storageSet, archiveData, setArchiveData }) => {
 
       setArchiveData(newArchiveData);
       console.log('Collage added to archive state for date:', today);
+
+      // Save to Supabase
+      if (saveCollageToSupabase) {
+        await saveCollageToSupabase(collageData);
+      }
 
       setSaveStatus('saved');
       setTimeout(() => {
@@ -1698,7 +1703,7 @@ const WindingPathApp = () => {
   const [isDrawing, setIsDrawing] = useState(false);
 
   // Landscape Page State
-  const [landscapeActiveLayer, setLandscapeActiveLayer] = useState(null); // null = show all, 1-12 = specific week
+  const [landscapeActiveLayer, setLandscapeActiveLayer] = useState(1); // Default to week 1, null = show all, 1-12 = specific week
   const [landscapePopup, setLandscapePopup] = useState(null); // null, 'principles', 'stop', 'affirmations', 'rules', etc.
   const [landscapeDragging, setLandscapeDragging] = useState(null); // which object is being dragged
   const [landscapePositions, setLandscapePositions] = useState({
@@ -1976,50 +1981,55 @@ const WindingPathApp = () => {
     }
   };
 
-  // Get or create user by email
+  // Get or create user by email (or unique ID if no email)
   const getOrCreateSupabaseUser = async (email, name, signature, checkInDayValue, startDate) => {
-    if (!supabaseRef.current || !email) return null;
+    if (!supabaseRef.current) return null;
 
     try {
+      // Generate a unique identifier if no email provided
+      const userIdentifier = email || `anonymous_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+
       // Upload signature to storage and get URL
       let signatureUrl = signature;
       if (signature && signature.startsWith('data:')) {
-        const uploadedUrl = await uploadSignatureToStorage(signature, email);
+        const uploadedUrl = await uploadSignatureToStorage(signature, userIdentifier);
         if (uploadedUrl) {
           signatureUrl = uploadedUrl;
         }
       }
 
-      // First, try to find existing user
-      const { data: existingUser, error: findError } = await supabaseRef.current
-        .from('users')
-        .select('*')
-        .eq('email', email)
-        .single();
-
-      if (existingUser) {
-        // Update user data if it changed
-        const { data: updatedUser, error: updateError } = await supabaseRef.current
+      // First, try to find existing user (only if real email provided)
+      if (email) {
+        const { data: existingUser, error: findError } = await supabaseRef.current
           .from('users')
-          .update({
-            name: name,
-            signature_url: signatureUrl,
-            check_in_day: checkInDayValue,
-            start_date: startDate,
-            updated_at: new Date().toISOString()
-          })
-          .eq('id', existingUser.id)
-          .select()
+          .select('*')
+          .eq('email', email)
           .single();
 
-        return updatedUser || existingUser;
+        if (existingUser) {
+          // Update user data if it changed
+          const { data: updatedUser, error: updateError } = await supabaseRef.current
+            .from('users')
+            .update({
+              name: name,
+              signature_url: signatureUrl,
+              check_in_day: checkInDayValue,
+              start_date: startDate,
+              updated_at: new Date().toISOString()
+            })
+            .eq('id', existingUser.id)
+            .select()
+            .single();
+
+          return updatedUser || existingUser;
+        }
       }
 
       // Create new user
       const { data: newUser, error: createError } = await supabaseRef.current
         .from('users')
         .insert({
-          email: email,
+          email: userIdentifier,
           name: name,
           signature_url: signatureUrl,
           check_in_day: checkInDayValue,
@@ -2071,7 +2081,13 @@ const WindingPathApp = () => {
 
   // Save landscape response to Supabase
   const saveLandscapeResponseToSupabase = async (promptKey, response) => {
-    if (!supabaseRef.current || !supabaseUserId || !response?.trim()) return;
+    if (!supabaseRef.current || !supabaseUserId) {
+      console.warn('Cannot save landscape response: Supabase not initialized or no user ID', { supabaseRef: !!supabaseRef.current, supabaseUserId });
+      return;
+    }
+    if (!response?.trim()) {
+      return; // Empty response, skip silently
+    }
 
     try {
       const { data, error } = await supabaseRef.current
@@ -2087,6 +2103,8 @@ const WindingPathApp = () => {
 
       if (error) {
         console.error('Error saving landscape response:', error);
+      } else {
+        console.log(`Landscape response "${promptKey}" saved to Supabase`);
       }
     } catch (err) {
       console.error('Supabase landscape error:', err);
@@ -2443,10 +2461,10 @@ const WindingPathApp = () => {
 
       // Email settings already loaded above in the preference loading section
 
-        // Initialize Supabase user if email exists and onboarding complete
+        // Initialize Supabase user if onboarding complete (email optional)
         if (savedUserName && savedSignature && savedCheckInDay && supabaseRef.current) {
           const user = await getOrCreateSupabaseUser(
-            savedEmail,
+            savedEmail || null,
             savedUserName,
             savedSignature,
             savedCheckInDay,
@@ -2590,6 +2608,13 @@ const WindingPathApp = () => {
           week: currentWeek
         });
 
+        // Save each landscape response to Supabase
+        for (const [key, value] of Object.entries(landscapeResponses)) {
+          if (value && typeof value === 'string' && value.trim()) {
+            await saveLandscapeResponseToSupabase(key, value);
+          }
+        }
+
         // Update archiveData state for immediate display in clocktower
         setArchiveData(prev => ({
           ...prev,
@@ -2653,11 +2678,11 @@ const WindingPathApp = () => {
       await storageSet('windingPath:delayFirstCheckIn', true);
     }
 
-    // Create/update Supabase user if email was provided
-    if (emailOptIn && userEmail.trim() && supabaseRef.current) {
+    // Create/update Supabase user (always, even without email)
+    if (supabaseRef.current) {
       const startDate = await storageGet('windingPath:startDate') || new Date().toISOString().split('T')[0];
       const user = await getOrCreateSupabaseUser(
-        userEmail.trim(),
+        emailOptIn && userEmail.trim() ? userEmail.trim() : null,
         userName,
         userSignature,
         day,
@@ -2668,7 +2693,7 @@ const WindingPathApp = () => {
         console.log('Supabase user created:', user.id);
 
         // Schedule initial email events if reminders are enabled
-        if (emailRemindersEnabled) {
+        if (emailOptIn && userEmail.trim() && emailRemindersEnabled) {
           await updateEmailPreferences({
             emailRemindersEnabled,
             dailyReminders,
@@ -3907,7 +3932,7 @@ const WindingPathApp = () => {
 
           {/* The Well - Collage Editor */}
           {currentPage === 'well' && (
-            <CollageEditor storageSet={storageSet} archiveData={archiveData} setArchiveData={setArchiveData} />
+            <CollageEditor storageSet={storageSet} archiveData={archiveData} setArchiveData={setArchiveData} saveCollageToSupabase={saveCollageToSupabase} />
           )}
 
           {/* The Clocktower Page */}
