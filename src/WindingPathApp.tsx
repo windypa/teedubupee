@@ -531,7 +531,7 @@ const ClocktowerArchive = ({ archiveData = {} }) => {
                                   }}
                                 >
                                   <img
-                                    src="/julia.jpg"
+                                    src={src/Images/Julia.src}
                                     alt=""
                                     style={{
                                       width: '100%',
@@ -1988,7 +1988,7 @@ const WindingPathApp = () => {
     try {
       // Generate a unique identifier if no email provided
       const userIdentifier = email || `anonymous_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-
+      
       // Upload signature to storage and get URL
       let signatureUrl = signature;
       if (signature && signature.startsWith('data:')) {
@@ -2442,8 +2442,10 @@ const WindingPathApp = () => {
 
       // Use the new calculateCurrentWeek from weekLoader
       const calculatedWeek = calculateCurrentWeek(start);
-      setCurrentWeek(calculatedWeek);
-      setLastWeekViewed(calculatedWeek);
+      const safeWeek = Math.max(1, calculatedWeek || 1); // Ensure week is at least 1
+      setCurrentWeek(safeWeek);
+      setLastWeekViewed(safeWeek);
+      setLandscapeActiveLayer(safeWeek); // Sync landscape to current week
       setDevStartDate(start);
 
       // Load landscape responses
@@ -2461,19 +2463,18 @@ const WindingPathApp = () => {
 
       // Email settings already loaded above in the preference loading section
 
-        // Initialize Supabase user if onboarding complete (email optional)
-        if (savedUserName && savedSignature && savedCheckInDay && supabaseRef.current) {
-          const user = await getOrCreateSupabaseUser(
-            savedEmail || null,
-            savedUserName,
-            savedSignature,
-            savedCheckInDay,
-            start
-          );
-          if (user) {
-            setSupabaseUserId(user.id);
-            console.log('Supabase user initialized:', user.id);
-          }
+      // Initialize Supabase user if onboarding complete (email optional)
+      if (savedUserName && savedSignature && savedCheckInDay && supabaseRef.current) {
+        const user = await getOrCreateSupabaseUser(
+          savedEmail || null,
+          savedUserName,
+          savedSignature,
+          savedCheckInDay,
+          start
+        );
+        if (user) {
+          setSupabaseUserId(user.id);
+          console.log('Supabase user initialized:', user.id);
         }
       }
 
@@ -2537,8 +2538,8 @@ const WindingPathApp = () => {
       setJournalEntries({});
       setPageEntry('');
 
-      // Sync landscape to show current week
-      setLandscapeActiveLayer(currentWeek);
+      // Sync landscape to show current week (ensure minimum of 1)
+      setLandscapeActiveLayer(Math.max(1, currentWeek));
 
       setLastWeekViewed(currentWeek);
     }
@@ -2885,7 +2886,7 @@ const WindingPathApp = () => {
     const todayStr = new Date().toISOString().split('T')[0];
     await storageSet('windingPath:startDate', todayStr);
     setDevStartDate(todayStr);
-    setCurrentWeek(computeWeekFromStart(todayStr));
+    setCurrentWeek(Math.max(1, computeWeekFromStart(todayStr)));
 
     alert('Program restarted. You are now at week 1.');
   };
@@ -2895,7 +2896,7 @@ const WindingPathApp = () => {
     if (!dateStr) return;
     await storageSet('windingPath:startDate', dateStr);
     setDevStartDate(dateStr);
-    setCurrentWeek(computeWeekFromStart(dateStr));
+    setCurrentWeek(Math.max(1, computeWeekFromStart(dateStr)));
     alert('Start date updated.');
   };
 
@@ -2907,7 +2908,7 @@ const WindingPathApp = () => {
     const startStr = start.toISOString().split('T')[0];
     await storageSet('windingPath:startDate', startStr);
     setDevStartDate(startStr);
-    setCurrentWeek(computeWeekFromStart(startStr));
+    setCurrentWeek(Math.max(1, computeWeekFromStart(startStr)));
     alert(`Jumped to week ${n}.`);
   };
 
@@ -6775,7 +6776,7 @@ Help us to create as an act of worship to you.`}
                               const todayStr = new Date().toISOString().split('T')[0];
                               await storageSet('windingPath:startDate', todayStr);
                               setDevStartDate(todayStr);
-                              setCurrentWeek(computeWeekFromStart(todayStr));
+                              setCurrentWeek(Math.max(1, computeWeekFromStart(todayStr)));
                               alert('Start date set to today');
                             }}
                             className="px-3 py-2 border hover:opacity-80"
