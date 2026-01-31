@@ -521,7 +521,7 @@ const ClocktowerArchive = ({ archiveData = {} }) => {
                                   }}
                                 >
                                   <img
-                                    src={/untitled folder/Julia.src}
+                                    src={src/Images/Julia.src}
                                     alt=""
                                     style={{
                                       width: '100%',
