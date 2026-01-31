@@ -531,7 +531,7 @@ const ClocktowerArchive = ({ archiveData = {} }) => {
                                   }}
                                 >
                                   <img
-                                    src={src/Images/Julia.src}
+                                    src="/julia.jpg"
                                     alt=""
                                     style={{
                                       width: '100%',
@@ -1988,7 +1988,7 @@ const WindingPathApp = () => {
     try {
       // Generate a unique identifier if no email provided
       const userIdentifier = email || `anonymous_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-      
+
       // Upload signature to storage and get URL
       let signatureUrl = signature;
       if (signature && signature.startsWith('data:')) {
