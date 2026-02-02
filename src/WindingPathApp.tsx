@@ -1532,9 +1532,6 @@ const WeeklyPrompts = ({ currentWeek, storageSet, checkInDay, userEmail, saveToS
     setExpandedPrompt(null);
   };
 
-    setExpandedPrompt(null);
-  };
-
   return (
     <div style={{ padding: '24px' }}>
       {/* Circular prompt buttons */}

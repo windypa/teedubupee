@@ -3,6 +3,7 @@
 // ============================================================================
 // This file handles dynamic loading of week components and cycling logic
 
+import React from 'react';
 import Week2 from './week2';
 import Week3 from './week3';
 import Week4 from './week4';
@@ -16,7 +17,7 @@ import Week11 from './week11';
 import Week12 from './week12';
 
 // Map of week number to component
-export const WEEK_COMPONENTS = {
+export const WEEK_COMPONENTS: Record<number, React.ComponentType<any> | undefined> = {
   2: Week2,
   3: Week3,
   4: Week4,
@@ -36,7 +37,8 @@ export const WEEK_COMPONENTS = {
  * @returns React component or null if week doesn't have a component
  */
 export const getWeekComponent = (weekNumber: number) => {
-  const normalizedWeek = Math.max(1, Math.min(12, weekNumber));
+  // Ensure week is always between 1-12
+  const normalizedWeek = Math.max(1, Math.min(12, weekNumber || 1));
   
   // Week 1 doesn't have a component - return null to show default
   if (normalizedWeek === 1) {
@@ -54,13 +56,32 @@ export const getWeekComponent = (weekNumber: number) => {
 export const calculateCurrentWeek = (startDate: string): number => {
   if (!startDate) return 1;
   
-  const start = new Date(startDate + 'T00:00:00');
-  const today = new Date();
-  const daysElapsed = Math.floor((today.getTime() - start.getTime()) / (1000 * 60 * 60 * 24));
-  const weeksElapsed = Math.floor(daysElapsed / 7);
-  
-  // Cycle back to week 1 after week 12
-  return (weeksElapsed % 12) + 1;
+  try {
+    const start = new Date(startDate + 'T00:00:00');
+    const today = new Date();
+    
+    // Validate the date
+    if (isNaN(start.getTime())) {
+      console.warn('Invalid start date:', startDate);
+      return 1;
+    }
+    
+    const daysElapsed = Math.floor((today.getTime() - start.getTime()) / (1000 * 60 * 60 * 24));
+    
+    // If start date is in the future, return week 1
+    if (daysElapsed < 0) {
+      return 1;
+    }
+    
+    const weeksElapsed = Math.floor(daysElapsed / 7);
+    
+    // Cycle back to week 1 after week 12
+    // This always returns 1-12
+    return (weeksElapsed % 12) + 1;
+  } catch (error) {
+    console.error('Error calculating current week:', error);
+    return 1;
+  }
 };
 
 /**
@@ -72,10 +93,15 @@ export const calculateCurrentWeek = (startDate: string): number => {
 export const getNextWeekStartDate = (startDate: string, currentWeek: number): string => {
   if (!startDate) return '';
   
-  const start = new Date(startDate + 'T00:00:00');
-  const nextWeekStart = new Date(start.getTime() + (currentWeek * 7 * 24 * 60 * 60 * 1000));
-  
-  return nextWeekStart.toISOString().split('T')[0];
+  try {
+    const start = new Date(startDate + 'T00:00:00');
+    const nextWeekStart = new Date(start.getTime() + (currentWeek * 7 * 24 * 60 * 60 * 1000));
+    
+    return nextWeekStart.toISOString().split('T')[0];
+  } catch (error) {
+    console.error('Error calculating next week start:', error);
+    return '';
+  }
 };
 
 /**
@@ -92,14 +118,15 @@ export const getWeekResponses = async (
   
   try {
     // Try to load all 10 prompts for this week
+    // FIXED: Use correct key format matching WindingPathApp.tsx
     for (let i = 1; i <= 10; i++) {
-      const key = `windingPath:week${weekNumber}:prompt${i}`;
+      const key = `windingPath:weeklyPrompt:w${weekNumber}-p${i}`;
       const data = await storageGet(key);
       
       if (data) {
         responses[i] = {
           completed: true,
-          ...JSON.parse(typeof data === 'string' ? data : JSON.stringify(data)),
+          ...(typeof data === 'object' ? data : {}),
         };
       }
     }
@@ -120,8 +147,9 @@ export const clearWeekResponses = async (
   storageDel: (key: string) => Promise<void>
 ): Promise<void> => {
   try {
+    // FIXED: Use correct key format matching WindingPathApp.tsx
     for (let i = 1; i <= 10; i++) {
-      const key = `windingPath:week${weekNumber}:prompt${i}`;
+      const key = `windingPath:weeklyPrompt:w${weekNumber}-p${i}`;
       await storageDel(key);
     }
     console.log(`Cleared all responses for week ${weekNumber}`);
