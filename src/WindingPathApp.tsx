@@ -3868,13 +3868,6 @@ const WindingPathApp = () => {
 
                       alert('Check-in saved successfully!');
                     }}
-                    <WeeklyPrompts
-  currentWeek={currentWeek}
-  storageSet={storageSet}
-  checkInDay={checkInDay}
-  userEmail={userEmail}
-  saveToSupabase={saveWeeklyPromptToSupabase}  // ADD THIS LINE
-/>
                     style={{
                       fontFamily: 'Helvetica, Arial, sans-serif',
                       backgroundColor: '#030f42',
@@ -3908,6 +3901,7 @@ const WindingPathApp = () => {
                       storageSet={storageSet}
                       checkInDay={checkInDay}
                       userEmail={userEmail}
+                      saveToSupabase={saveWeeklyPromptToSupabase}
                     />
                   );
                 }
