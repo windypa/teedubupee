@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { AlertCircle } from 'lucide-react';
 import { getWeekComponent, calculateCurrentWeek, clearWeekResponses } from './weekLoader';
+import { SpeedInsights } from '@vercel/speed-insights/react';
 
 // ============================================================================
 // SUPABASE CONFIGURATION
@@ -531,7 +532,7 @@ const ClocktowerArchive = ({ archiveData = {} }) => {
                                   }}
                                 >
                                   <img
-                                    src={"/julia.jpg"
+                                    src={"/julia.jpg"}
                                     alt=""
                                     style={{
                                       width: '100%',
@@ -6849,6 +6850,7 @@ Help us to create as an act of worship to you.`}
             </div>
           </div>
         )}
+        <SpeedInsights />
       </div>
     );
   }
