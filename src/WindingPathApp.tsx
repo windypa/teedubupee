@@ -1698,7 +1698,7 @@ const WindingPathApp = () => {
   const [isDrawing, setIsDrawing] = useState(false);
 
   // Landscape Page State
-  const [landscapeActiveLayer, setLandscapeActiveLayer] = useState(1); // Default to week 1, null = show all, 1-12 = specific week
+  const [landscapeActiveLayer, setLandscapeActiveLayer] = useState(1); // Default to week 1
   const [landscapePopup, setLandscapePopup] = useState(null); // null, 'principles', 'stop', 'affirmations', 'rules', etc.
   const [landscapeDragging, setLandscapeDragging] = useState(null); // which object is being dragged
   const [landscapePositions, setLandscapePositions] = useState({
@@ -2412,7 +2412,8 @@ const WindingPathApp = () => {
       if (!savedUserName || !savedSignature || !savedCheckInDay) {
         setAppState('splash');
       } else {
-        setAppState('main');
+        // Returning user - show welcome back screen
+        setAppState('welcome-back');
       }
 
       let start = await storageGet('windingPath:startDate');
@@ -2424,10 +2425,10 @@ const WindingPathApp = () => {
 
       // Use the new calculateCurrentWeek from weekLoader
       const calculatedWeek = calculateCurrentWeek(start);
-      const safeWeek = Math.max(1, calculatedWeek || 1); // Ensure week is at least 1
+      const safeWeek = Math.max(1, calculatedWeek || 1);
       setCurrentWeek(safeWeek);
       setLastWeekViewed(safeWeek);
-      setLandscapeActiveLayer(safeWeek); // Sync landscape to current week
+      setLandscapeActiveLayer(safeWeek);
       setDevStartDate(start);
 
       // Load landscape responses
@@ -2520,7 +2521,7 @@ const WindingPathApp = () => {
       setJournalEntries({});
       setPageEntry('');
 
-      // Sync landscape to show current week (ensure minimum of 1)
+      // Sync landscape to current week
       setLandscapeActiveLayer(Math.max(1, currentWeek));
 
       setLastWeekViewed(currentWeek);
@@ -3041,6 +3042,61 @@ const WindingPathApp = () => {
               {splashQuote}
             </p>
           )}
+        </div>
+      </div>
+    );
+  }
+
+  // Welcome Back Screen - Returning Users
+  if (appState === 'welcome-back') {
+    const today = new Date();
+    const dayOfWeek = today.toLocaleDateString('en-US', { weekday: 'long' });
+    const month = today.toLocaleDateString('en-US', { month: 'long' });
+    const date = today.getDate();
+    
+    return (
+      <div className="min-h-screen bg-white flex items-center justify-center p-4">
+        <style>{`
+          @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+          }
+          .fade-in {
+            animation: fadeIn 0.8s ease-out forwards;
+          }
+          .fade-in-delay-1 {
+            opacity: 0;
+            animation: fadeIn 0.8s ease-out 0.3s forwards;
+          }
+          .fade-in-delay-2 {
+            opacity: 0;
+            animation: fadeIn 0.8s ease-out 0.6s forwards;
+          }
+        `}</style>
+        <div className="text-center max-w-2xl">
+          <h1
+            className="text-5xl mb-6 fade-in"
+            style={{ fontFamily: 'Helvetica, Arial, sans-serif', color: '#030f42', fontWeight: 'normal' }}
+          >
+            welcome back, {userName}
+          </h1>
+          <p
+            className="text-2xl mb-12 fade-in-delay-1"
+            style={{ fontFamily: 'Helvetica, Arial, sans-serif', color: '#030f42', opacity: 0.7 }}
+          >
+            {dayOfWeek}, {month} {date}
+          </p>
+          <button
+            onClick={() => setAppState('main')}
+            className="px-12 py-4 text-xl transition-all hover:opacity-80 fade-in-delay-2"
+            style={{
+              fontFamily: 'Helvetica, Arial, sans-serif',
+              backgroundColor: '#030f42',
+              color: 'white'
+            }}
+          >
+            continue
+          </button>
         </div>
       </div>
     );
