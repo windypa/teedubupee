@@ -1420,7 +1420,7 @@ const CollageEditor = ({ storageSet, archiveData, setArchiveData, saveCollageToS
 
 // Main App Component
 // Weekly Prompts Component
-const WeeklyPrompts = ({ currentWeek, storageSet, checkInDay, userEmail, saveToSupabase}) => {
+const WeeklyPrompts = ({ currentWeek, storageSet, checkInDay, userEmail, saveToSupabase, archiveData, setArchiveData }) => {
   const [expandedPrompt, setExpandedPrompt] = useState(null);
   const [promptResponses, setPromptResponses] = useState({});
 
@@ -1516,7 +1516,22 @@ const WeeklyPrompts = ({ currentWeek, storageSet, checkInDay, userEmail, saveToS
     // Save to local storage
     await storageSet(`windingPath:weeklyPrompt:w${currentWeek}-p${promptNumber}`, response);
 
-    // ✅ ADD THIS: Save to Supabase
+    // Save to archive
+    if (setArchiveData) {
+      setArchiveData(prev => ({
+        ...prev,
+        [today]: {
+          ...prev[today],
+          date: today,
+          weeklyPrompts: {
+            ...(prev[today]?.weeklyPrompts || {}),
+            [`w${currentWeek}-p${promptNumber}`]: response
+          }
+        }
+      }));
+    }
+
+    // Save to Supabase
     if (saveToSupabase) {
       await saveToSupabase(currentWeek, promptNumber, text, true);
     }
@@ -2173,9 +2188,89 @@ const WindingPathApp = () => {
 
       if (error) {
         console.error('Error saving collage:', error);
+      } else {
+        console.log('Collage saved to Supabase');
       }
     } catch (err) {
       console.error('Supabase collage error:', err);
+    }
+  };
+
+  // Load archive data from Supabase for returning users
+  const loadArchiveFromSupabase = async (userId) => {
+    if (!supabaseRef.current || !userId) return null;
+
+    try {
+      const archiveData = {};
+
+      // Load weekly prompt responses
+      const { data: prompts, error: promptsError } = await supabaseRef.current
+        .from('weekly_prompt_responses')
+        .select('*')
+        .eq('user_id', userId);
+
+      if (prompts && !promptsError) {
+        prompts.forEach(p => {
+          const date = new Date(p.created_at).toISOString().split('T')[0];
+          if (!archiveData[date]) archiveData[date] = { date };
+          if (!archiveData[date].weeklyPrompts) archiveData[date].weeklyPrompts = {};
+          archiveData[date].weeklyPrompts[`w${p.week}-p${p.prompt_number}`] = {
+            text: p.response,
+            completed: p.completed,
+            week: p.week
+          };
+        });
+      }
+
+      // Load landscape responses
+      const { data: landscape, error: landscapeError } = await supabaseRef.current
+        .from('landscape_responses')
+        .select('*')
+        .eq('user_id', userId);
+
+      if (landscape && !landscapeError) {
+        landscape.forEach(l => {
+          const date = new Date(l.created_at).toISOString().split('T')[0];
+          if (!archiveData[date]) archiveData[date] = { date };
+          if (!archiveData[date].landscapeResponses) archiveData[date].landscapeResponses = {};
+          archiveData[date].landscapeResponses[l.prompt_key] = l.response;
+        });
+      }
+
+      // Load check-ins
+      const { data: checkIns, error: checkInsError } = await supabaseRef.current
+        .from('check_in_responses')
+        .select('*')
+        .eq('user_id', userId);
+
+      if (checkIns && !checkInsError) {
+        checkIns.forEach(c => {
+          const date = c.check_in_date;
+          if (!archiveData[date]) archiveData[date] = { date };
+          archiveData[date].checkIn = c.responses;
+        });
+      }
+
+      // Load collages
+      const { data: collages, error: collagesError } = await supabaseRef.current
+        .from('collages')
+        .select('*')
+        .eq('user_id', userId);
+
+      if (collages && !collagesError) {
+        collages.forEach(c => {
+          const date = new Date(c.created_at).toISOString().split('T')[0];
+          if (!archiveData[date]) archiveData[date] = { date };
+          if (!archiveData[date].collages) archiveData[date].collages = [];
+          archiveData[date].collages.push(c.collage_data);
+        });
+      }
+
+      console.log('Archive loaded from Supabase:', Object.keys(archiveData).length, 'dates');
+      return archiveData;
+    } catch (err) {
+      console.error('Error loading archive from Supabase:', err);
+      return null;
     }
   };
 
@@ -2436,6 +2531,13 @@ const WindingPathApp = () => {
             
             // Set the Supabase user ID
             setSupabaseUserId(user.id);
+
+            // Load archive data from Supabase
+            const supabaseArchive = await loadArchiveFromSupabase(user.id);
+            if (supabaseArchive && Object.keys(supabaseArchive).length > 0) {
+              setArchiveData(supabaseArchive);
+              console.log('Archive restored from Supabase');
+            }
           }
         } catch (err) {
           console.warn('Could not restore user from Supabase:', err);
@@ -4038,6 +4140,8 @@ const WindingPathApp = () => {
                       checkInDay={checkInDay}
                       userEmail={userEmail}
                       saveToSupabase={saveWeeklyPromptToSupabase}
+                      archiveData={archiveData}
+                      setArchiveData={setArchiveData}
                     />
                   );
                 }
