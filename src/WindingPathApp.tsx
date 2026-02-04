@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { AlertCircle } from 'lucide-react';
 import { getWeekComponent, calculateCurrentWeek, clearWeekResponses } from './weekLoader';
-import juliaImage from './julia.jpg';
 
 // ============================================================================
 // SUPABASE CONFIGURATION
@@ -672,7 +671,7 @@ const ClocktowerArchive = ({ archiveData = {} }) => {
 // Collage Editor Component
 const CollageEditor = ({ storageSet, archiveData, setArchiveData, saveCollageToSupabase }) => {
   const [items, setItems] = useState([
-    { id: 1, src: juliaImage, x: 50, y: 50, rotation: 0, scaleX: 1, scaleY: 1, zIndex: 1, width: 200, height: 200 },
+    { id: 1, src: '/julia.jpg', x: 50, y: 50, rotation: 0, scaleX: 1, scaleY: 1, zIndex: 1, width: 200, height: 200 },
   ]);
   const [selectedId, setSelectedId] = useState(null);
   const [isDragging, setIsDragging] = useState(false);
