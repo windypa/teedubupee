@@ -2315,8 +2315,11 @@ const WindingPathApp = () => {
   // Persistent storage helper functions
   const storageSet = async (key, value) => {
     try {
+      // Use window.storage (Claude environment) or localStorage (deployed)
       if (window.storage) {
         await window.storage.set(key, JSON.stringify(value));
+      } else if (typeof localStorage !== 'undefined') {
+        localStorage.setItem(key, JSON.stringify(value));
       }
     } catch (err) {
       // Storage is broken, silently ignore
@@ -2325,9 +2328,13 @@ const WindingPathApp = () => {
 
   const storageGet = async (key) => {
     try {
+      // Use window.storage (Claude environment) or localStorage (deployed)
       if (window.storage) {
         const result = await window.storage.get(key);
         return result ? JSON.parse(result.value) : null;
+      } else if (typeof localStorage !== 'undefined') {
+        const result = localStorage.getItem(key);
+        return result ? JSON.parse(result) : null;
       }
     } catch (err) {
       // Storage is broken, silently ignore
@@ -2340,9 +2347,14 @@ const WindingPathApp = () => {
       if (window.storage) {
         await window.storage.delete(key);
         console.log(`🗑️ Deleted: ${key}`);
+      } else if (typeof localStorage !== 'undefined') {
+        localStorage.removeItem(key);
+        console.log(`🗑️ Deleted: ${key}`);
       }
     } catch (error) {
       console.error('Error deleting from storage:', error);
+    }
+  };
     }
   };
 
@@ -2372,11 +2384,45 @@ const WindingPathApp = () => {
         }
       }
 
-      // Check if user has completed onboarding by looking for userName
-      const savedUserName = await storageGet('windingPath:userName');
-      const savedSignature = await storageGet('windingPath:userSignature');
-      const savedCheckInDay = await storageGet('windingPath:checkInDay');
-      const savedEmail = await storageGet('windingPath:userEmail');
+      // Check localStorage first for user data
+      let savedUserName = await storageGet('windingPath:userName');
+      let savedSignature = await storageGet('windingPath:userSignature');
+      let savedCheckInDay = await storageGet('windingPath:checkInDay');
+      let savedEmail = await storageGet('windingPath:userEmail');
+      let savedStartDate = await storageGet('windingPath:startDate');
+      
+      // If we have email but missing other data, try to fetch from Supabase
+      if (savedEmail && supabaseRef.current && (!savedUserName || !savedCheckInDay)) {
+        try {
+          console.log('Attempting to restore user from Supabase...');
+          const { data: user, error } = await supabaseRef.current
+            .from('users')
+            .select('*')
+            .eq('email', savedEmail)
+            .single();
+          
+          if (user && !error) {
+            console.log('User found in Supabase, restoring data...');
+            // Restore user data from Supabase
+            savedUserName = user.name;
+            savedSignature = user.signature_url;
+            savedCheckInDay = user.check_in_day;
+            savedStartDate = user.start_date;
+            
+            // Save back to localStorage for faster future loads
+            await storageSet('windingPath:userName', user.name);
+            await storageSet('windingPath:userSignature', user.signature_url);
+            await storageSet('windingPath:checkInDay', user.check_in_day);
+            await storageSet('windingPath:startDate', user.start_date);
+            
+            // Set the Supabase user ID
+            setSupabaseUserId(user.id);
+          }
+        } catch (err) {
+          console.warn('Could not restore user from Supabase:', err);
+        }
+      }
+
       const savedEmailOptIn = await storageGet('windingPath:emailOptIn');
       const savedEmailRemindersEnabled = await storageGet('windingPath:emailRemindersEnabled');
       const savedDailyReminders = await storageGet('windingPath:dailyReminders');
