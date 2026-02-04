@@ -2003,7 +2003,7 @@ const WindingPathApp = () => {
           .from('users')
           .update({
             name: name,
-            signature_url: signatureUrl,
+            signature: signatureUrl,
             check_in_day: checkInDayValue,
             start_date: startDate,
             updated_at: new Date().toISOString()
@@ -2021,7 +2021,7 @@ const WindingPathApp = () => {
         .insert({
           email: email,
           name: name,
-          signature_url: signatureUrl,
+          signature: signatureUrl,
           check_in_day: checkInDayValue,
           start_date: startDate
         })
@@ -2405,13 +2405,13 @@ const WindingPathApp = () => {
             console.log('User found in Supabase, restoring data...');
             // Restore user data from Supabase
             savedUserName = user.name;
-            savedSignature = user.signature_url;
+            savedSignature = user.signature;
             savedCheckInDay = user.check_in_day;
             savedStartDate = user.start_date;
             
             // Save back to localStorage for faster future loads
             await storageSet('windingPath:userName', user.name);
-            await storageSet('windingPath:userSignature', user.signature_url);
+            await storageSet('windingPath:userSignature', user.signature);
             await storageSet('windingPath:checkInDay', user.check_in_day);
             await storageSet('windingPath:startDate', user.start_date);
             
