@@ -1518,6 +1518,7 @@ const WeeklyPrompts = ({ currentWeek, storageSet, checkInDay, userEmail, saveToS
 
     // Save to archive
     if (setArchiveData) {
+      const today = new Date().toISOString().split('T')[0];
       setArchiveData(prev => ({
         ...prev,
         [today]: {
