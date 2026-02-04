@@ -531,7 +531,7 @@ const ClocktowerArchive = ({ archiveData = {} }) => {
                                   }}
                                 >
                                   <img
-                                    src={src/Images/Julia.src}
+                                    src={item.src}
                                     alt=""
                                     style={{
                                       width: '100%',
@@ -669,7 +669,7 @@ const ClocktowerArchive = ({ archiveData = {} }) => {
 
 
 // Collage Editor Component
-const CollageEditor = ({ storageSet, archiveData, setArchiveData }) => {
+const CollageEditor = ({ storageSet, archiveData, setArchiveData, saveCollageToSupabase }) => {
   const [items, setItems] = useState([
     { id: 1, src: 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAYABgAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/2wBDAQkJCQwLDBgNDRgyIRwhMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjL/wAARCAEsASwDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWm5ybnJ2eoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD3+iiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigD/2Q==', x: 50, y: 50, rotation: 0, scaleX: 1, scaleY: 1, zIndex: 1, width: 200, height: 200 },
   ]);
@@ -728,6 +728,11 @@ const CollageEditor = ({ storageSet, archiveData, setArchiveData }) => {
 
       setArchiveData(newArchiveData);
       console.log('Collage added to archive state for date:', today);
+
+      // Save to Supabase
+      if (saveCollageToSupabase) {
+        await saveCollageToSupabase(collageData);
+      }
 
       setSaveStatus('saved');
       setTimeout(() => {
@@ -2071,7 +2076,11 @@ const WindingPathApp = () => {
 
   // Save landscape response to Supabase
   const saveLandscapeResponseToSupabase = async (promptKey, response) => {
-    if (!supabaseRef.current || !supabaseUserId || !response?.trim()) return;
+    if (!supabaseRef.current || !supabaseUserId) {
+      console.warn('Cannot save landscape: no Supabase or user ID');
+      return;
+    }
+    if (!response?.trim()) return;
 
     try {
       const { data, error } = await supabaseRef.current
@@ -2087,6 +2096,8 @@ const WindingPathApp = () => {
 
       if (error) {
         console.error('Error saving landscape response:', error);
+      } else {
+        console.log(`Landscape "${promptKey}" saved to Supabase`);
       }
     } catch (err) {
       console.error('Supabase landscape error:', err);
@@ -2318,11 +2329,15 @@ const WindingPathApp = () => {
       // Use window.storage (Claude environment) or localStorage (deployed)
       if (window.storage) {
         await window.storage.set(key, JSON.stringify(value));
+        console.log(`💾 Saved (window.storage): ${key}`);
       } else if (typeof localStorage !== 'undefined') {
         localStorage.setItem(key, JSON.stringify(value));
+        console.log(`💾 Saved (localStorage): ${key}`);
+      } else {
+        console.warn('No storage available for:', key);
       }
     } catch (err) {
-      // Storage is broken, silently ignore
+      console.error('Storage set error:', key, err);
     }
   };
 
@@ -2331,13 +2346,19 @@ const WindingPathApp = () => {
       // Use window.storage (Claude environment) or localStorage (deployed)
       if (window.storage) {
         const result = await window.storage.get(key);
-        return result ? JSON.parse(result.value) : null;
+        const value = result ? JSON.parse(result.value) : null;
+        console.log(`📖 Read (window.storage): ${key} =`, value ? 'found' : 'null');
+        return value;
       } else if (typeof localStorage !== 'undefined') {
         const result = localStorage.getItem(key);
-        return result ? JSON.parse(result) : null;
+        const value = result ? JSON.parse(result) : null;
+        console.log(`📖 Read (localStorage): ${key} =`, value ? 'found' : 'null');
+        return value;
       }
+      console.warn('No storage available for reading:', key);
+      return null;
     } catch (err) {
-      // Storage is broken, silently ignore
+      console.error('Storage get error:', key, err);
       return null;
     }
   };
@@ -2353,8 +2374,6 @@ const WindingPathApp = () => {
       }
     } catch (error) {
       console.error('Error deleting from storage:', error);
-    }
-  };
     }
   };
 
@@ -2455,10 +2474,13 @@ const WindingPathApp = () => {
       }
 
       // If user hasn't completed full onboarding, show splash
+      console.log('🔍 User check:', { savedUserName, savedSignature: !!savedSignature, savedCheckInDay });
       if (!savedUserName || !savedSignature || !savedCheckInDay) {
+        console.log('➡️ Showing splash (missing data)');
         setAppState('splash');
       } else {
         // Returning user - show welcome back screen
+        console.log('➡️ Showing welcome-back for:', savedUserName);
         setAppState('welcome-back');
       }
 
@@ -2640,6 +2662,16 @@ const WindingPathApp = () => {
           savedAt: new Date().toISOString(),
           week: currentWeek
         });
+
+        // Save each landscape response to Supabase
+        if (supabaseRef.current && supabaseUserId) {
+          for (const [key, value] of Object.entries(landscapeResponses)) {
+            if (value && typeof value === 'string' && value.trim()) {
+              await saveLandscapeResponseToSupabase(key, value);
+            }
+          }
+          console.log('Landscape responses saved to Supabase');
+        }
 
         // Update archiveData state for immediate display in clocktower
         setArchiveData(prev => ({
@@ -2930,7 +2962,9 @@ const WindingPathApp = () => {
     const startStr = start.toISOString().split('T')[0];
     await storageSet('windingPath:startDate', startStr);
     setDevStartDate(startStr);
-    setCurrentWeek(computeWeekFromStart(startStr));
+    const newWeek = Math.max(1, computeWeekFromStart(startStr));
+    setCurrentWeek(newWeek);
+    setLandscapeActiveLayer(newWeek);
     alert(`Jumped to week ${n}.`);
   };
 
@@ -4013,7 +4047,7 @@ const WindingPathApp = () => {
 
           {/* The Well - Collage Editor */}
           {currentPage === 'well' && (
-            <CollageEditor storageSet={storageSet} archiveData={archiveData} setArchiveData={setArchiveData} />
+            <CollageEditor storageSet={storageSet} archiveData={archiveData} setArchiveData={setArchiveData} saveCollageToSupabase={saveCollageToSupabase} />
           )}
 
           {/* The Clocktower Page */}
