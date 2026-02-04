@@ -672,7 +672,7 @@ const ClocktowerArchive = ({ archiveData = {} }) => {
 // Collage Editor Component
 const CollageEditor = ({ storageSet, archiveData, setArchiveData, saveCollageToSupabase }) => {
   const [items, setItems] = useState([
-    { id: 1, src: juliaImg, x: 50, y: 50, rotation: 0, scaleX: 1, scaleY: 1, zIndex: 1, width: 200, height: 200 },
+    { id: 1, src: 'https://raw.githubusercontent.com/windypa/teedubupee/main/src/julia.jpg', x: 50, y: 50, rotation: 0, scaleX: 1, scaleY: 1, zIndex: 1, width: 200, height: 200 },
   ]);
   const [selectedId, setSelectedId] = useState(null);
   const [isDragging, setIsDragging] = useState(false);
