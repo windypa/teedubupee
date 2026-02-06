@@ -1558,28 +1558,6 @@ const WeeklyPrompts = ({ currentWeek, storageSet, checkInDay, userEmail, saveToS
     <div style={{ padding: '24px' }}>
       {/* Circular prompt buttons */}
       <div style={{ position: 'relative', width: '100%', height: '600px', margin: '0 auto' }}>
-        {/* Center image/text - can be replaced with external image */}
-        <div
-          style={{
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
-            width: '120px',
-            height: '120px',
-            borderRadius: '50%',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            backgroundColor: '#f8f9fa',
-            zIndex: 10,
-            overflow: 'hidden',
-          }}
-        >
-          <p style={{ fontFamily: 'Helvetica, Arial, sans-serif', color: '#030f42', fontSize: '12px', margin: '0', opacity: 0.5 }}>
-            coming soon
-          </p>
-        </div>
 
         {/* 10 circular prompt buttons floating around - clockwise from top */}
         {Object.entries(prompts).map(([key, prompt]) => {
