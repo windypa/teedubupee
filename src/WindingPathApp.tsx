@@ -60,10 +60,11 @@ const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBh
  * Table: email_events
  * - id: uuid (primary key, auto-generated)
  * - user_id: uuid (foreign key to users.id)
- * - event_type: text (e.g., 'daily_reminder', 'weekly_greeting', 'check_in_reminder')
+ * - event_type: text (e.g., 'welcome', 'daily_reminder', 'weekly_greeting', 'check_in_reminder', 'week_transition', 'future_letter')
  * - scheduled_for: timestamp with time zone
  * - sent_at: timestamp with time zone
- * - status: text (e.g., 'pending', 'sent', 'failed')
+ * - status: text (e.g., 'pending', 'sent', 'failed', 'cancelled')
+ * - metadata: jsonb (optional - for custom data like letter content, week number, etc.)
  * - created_at: timestamp with time zone (default now())
  *
  * Table: weekly_prompt_responses
@@ -376,16 +377,15 @@ const ClocktowerArchive = ({ archiveData = {} }) => {
                 {selectedArchive.landscapeResponses && Object.keys(selectedArchive.landscapeResponses).length > 0 && (
                   <div className="mb-8">
                     <h4 style={{ fontFamily: 'Helvetica, Arial, sans-serif', color: '#030f42', fontSize: '14px', fontWeight: 'bold', marginBottom: '8px' }}>
-                      Landscape Prompts ({Object.keys(selectedArchive.landscapeResponses).length} responses)
+                      Landscape Reflections
                     </h4>
-                    <div className="p-4 border bg-gray-50 max-h-96 overflow-y-auto space-y-3" style={{ borderColor: '#030f42' }}>
-                      {Object.entries(selectedArchive.landscapeResponses).map(([key, value]) => (
-                        <div key={key} className="pb-2 border-b border-gray-200 last:border-0">
-                          <p style={{ fontFamily: 'Helvetica, Arial, sans-serif', color: '#030f42', fontSize: '11px', opacity: 0.6, marginBottom: '2px' }}>
-                            {key}
-                          </p>
-                          <p style={{ fontFamily: 'Helvetica, Arial, sans-serif', color: '#030f42', fontSize: '13px', lineHeight: '1.5' }}>
-                            {String(value)}
+                    <div className="p-4 border bg-gray-50 max-h-96 overflow-y-auto space-y-4" style={{ borderColor: '#030f42' }}>
+                      {Object.entries(selectedArchive.landscapeResponses)
+                        .filter(([key, value]) => value && String(value).trim())
+                        .map(([key, value], index) => (
+                        <div key={key} className="pb-3 border-b border-gray-200 last:border-0">
+                          <p style={{ fontFamily: 'Helvetica, Arial, sans-serif', color: '#030f42', fontSize: '13px', lineHeight: '1.6', fontStyle: 'italic' }}>
+                            "{String(value)}"
                           </p>
                         </div>
                       ))}
@@ -1421,7 +1421,7 @@ const CollageEditor = ({ storageSet, archiveData, setArchiveData, saveCollageToS
 
 // Main App Component
 // Weekly Prompts Component
-const WeeklyPrompts = ({ currentWeek, storageSet, checkInDay, userEmail, saveToSupabase, archiveData, setArchiveData }) => {
+const WeeklyPrompts = ({ currentWeek, storageSet, checkInDay, userEmail, saveToSupabase, archiveData, setArchiveData, scheduleFutureLetter }) => {
   const [expandedPrompt, setExpandedPrompt] = useState(null);
   const [promptResponses, setPromptResponses] = useState({});
 
@@ -1539,16 +1539,22 @@ const WeeklyPrompts = ({ currentWeek, storageSet, checkInDay, userEmail, saveToS
     }
 
     // If this is a mailable prompt (5), schedule it to send in 3 days
-    if (promptNumber === 5 && userEmail) {
+    if (promptNumber === 5 && userEmail && text.trim()) {
       const sendDate = new Date();
       sendDate.setDate(sendDate.getDate() + 3);
 
+      // Save to localStorage as backup
       await storageSet(`windingPath:mailablePrompt:w${currentWeek}-p${promptNumber}`, {
         ...response,
         sendOn: sendDate.toISOString().split('T')[0],
         recipientEmail: userEmail,
         scheduledSend: true,
       });
+
+      // Schedule email in Supabase
+      if (scheduleFutureLetter) {
+        await scheduleFutureLetter(text, sendDate.toISOString());
+      }
     }
 
     setExpandedPrompt(null);
@@ -2349,25 +2355,130 @@ const WindingPathApp = () => {
   };
 
   // Schedule email event
-  const scheduleEmailEvent = async (eventType, scheduledFor) => {
-    if (!supabaseRef.current || !supabaseUserId) return;
+  // Schedule an email event in Supabase
+  const scheduleEmailEvent = async (eventType, scheduledFor, metadata = null) => {
+    if (!supabaseRef.current || !supabaseUserId) return null;
 
     try {
+      // Check if similar event already pending (avoid duplicates)
+      const { data: existing } = await supabaseRef.current
+        .from('email_events')
+        .select('id')
+        .eq('user_id', supabaseUserId)
+        .eq('event_type', eventType)
+        .eq('status', 'pending')
+        .gte('scheduled_for', new Date().toISOString())
+        .limit(1);
+
+      // Don't create duplicate if one already exists (except for future_letter which can have multiple)
+      if (existing && existing.length > 0 && eventType !== 'future_letter') {
+        console.log(`Email event ${eventType} already scheduled, skipping`);
+        return existing[0];
+      }
+
+      const eventData = {
+        user_id: supabaseUserId,
+        event_type: eventType,
+        scheduled_for: scheduledFor,
+        status: 'pending'
+      };
+
+      if (metadata) {
+        eventData.metadata = metadata;
+      }
+
       const { data, error } = await supabaseRef.current
         .from('email_events')
-        .insert({
-          user_id: supabaseUserId,
-          event_type: eventType,
-          scheduled_for: scheduledFor,
-          status: 'pending'
-        });
+        .insert(eventData)
+        .select()
+        .single();
 
       if (error) {
         console.error('Error scheduling email:', error);
+        return null;
       }
+      
+      console.log(`📧 Email scheduled: ${eventType} for ${scheduledFor}`);
       return data;
     } catch (err) {
       console.error('Supabase email event error:', err);
+      return null;
+    }
+  };
+
+  // Schedule welcome email for new users
+  const scheduleWelcomeEmail = async () => {
+    if (!supabaseRef.current || !supabaseUserId || !userEmail) return;
+    
+    // Send welcome email immediately (scheduled for now)
+    await scheduleEmailEvent('welcome', new Date().toISOString(), {
+      userName: userName,
+      checkInDay: checkInDay
+    });
+  };
+
+  // Schedule week transition email
+  const scheduleWeekTransitionEmail = async (fromWeek, toWeek) => {
+    if (!supabaseRef.current || !supabaseUserId || !userEmail) return;
+    
+    await scheduleEmailEvent('week_transition', new Date().toISOString(), {
+      userName: userName,
+      fromWeek: fromWeek,
+      toWeek: toWeek
+    });
+  };
+
+  // Schedule "letter to future self" delivery
+  const scheduleFutureLetterEmail = async (letterContent, deliveryDate) => {
+    if (!supabaseRef.current || !supabaseUserId || !userEmail) return;
+    
+    await scheduleEmailEvent('future_letter', deliveryDate, {
+      userName: userName,
+      letterContent: letterContent,
+      writtenOn: new Date().toISOString()
+    });
+    
+    console.log(`📬 Future letter scheduled for delivery on ${deliveryDate}`);
+  };
+
+  // Reschedule recurring emails (called after each email would be sent)
+  const rescheduleRecurringEmails = async () => {
+    if (!supabaseRef.current || !supabaseUserId) return;
+
+    const now = new Date();
+
+    // Daily reminder - schedule for tomorrow 6am
+    if (dailyReminders && emailRemindersEnabled) {
+      const tomorrow = new Date(now);
+      tomorrow.setDate(tomorrow.getDate() + 1);
+      tomorrow.setHours(6, 0, 0, 0);
+      await scheduleEmailEvent('daily_reminder', tomorrow.toISOString());
+    }
+
+    // Weekly greeting - schedule for next Monday 9am
+    if (weeklyGreetings && emailRemindersEnabled) {
+      const nextMonday = new Date(now);
+      const daysUntilMonday = (1 + 7 - nextMonday.getDay()) % 7 || 7;
+      nextMonday.setDate(nextMonday.getDate() + daysUntilMonday);
+      nextMonday.setHours(9, 0, 0, 0);
+      await scheduleEmailEvent('weekly_greeting', nextMonday.toISOString(), {
+        userName: userName,
+        currentWeek: currentWeek
+      });
+    }
+
+    // Check-in reminder - schedule for check-in day 8am
+    if (checkInReminders && emailRemindersEnabled && checkInDay) {
+      const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+      const checkInDayIndex = daysOfWeek.indexOf(checkInDay);
+      const nextCheckIn = new Date(now);
+      const daysUntilCheckIn = (checkInDayIndex + 7 - now.getDay()) % 7 || 7;
+      nextCheckIn.setDate(nextCheckIn.getDate() + daysUntilCheckIn);
+      nextCheckIn.setHours(8, 0, 0, 0);
+      await scheduleEmailEvent('check_in_reminder', nextCheckIn.toISOString(), {
+        userName: userName,
+        checkInDay: checkInDay
+      });
     }
   };
 
@@ -2396,37 +2507,12 @@ const WindingPathApp = () => {
           .from('email_events')
           .update({ status: 'cancelled' })
           .eq('user_id', supabaseUserId)
-          .eq('status', 'pending');
+          .eq('status', 'pending')
+          .neq('event_type', 'future_letter'); // Don't cancel future letters
+        console.log('📧 Recurring email events cancelled');
       } else {
-        // Schedule next events based on preferences
-        const now = new Date();
-
-        if (preferences.dailyReminders) {
-          // Schedule next morning reminder (6am next day)
-          const tomorrow = new Date(now);
-          tomorrow.setDate(tomorrow.getDate() + 1);
-          tomorrow.setHours(6, 0, 0, 0);
-          await scheduleEmailEvent('daily_reminder', tomorrow.toISOString());
-        }
-
-        if (preferences.weeklyGreetings) {
-          // Schedule weekly greeting for Monday 9am
-          const nextMonday = new Date(now);
-          nextMonday.setDate(nextMonday.getDate() + ((1 + 7 - nextMonday.getDay()) % 7 || 7));
-          nextMonday.setHours(9, 0, 0, 0);
-          await scheduleEmailEvent('weekly_greeting', nextMonday.toISOString());
-        }
-
-        if (preferences.checkInReminders && checkInDay) {
-          // Schedule check-in reminder for check-in day morning
-          const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-          const checkInDayIndex = daysOfWeek.indexOf(checkInDay);
-          const nextCheckIn = new Date(now);
-          const daysUntilCheckIn = (checkInDayIndex + 7 - now.getDay()) % 7 || 7;
-          nextCheckIn.setDate(nextCheckIn.getDate() + daysUntilCheckIn);
-          nextCheckIn.setHours(8, 0, 0, 0);
-          await scheduleEmailEvent('check_in_reminder', nextCheckIn.toISOString());
-        }
+        // Schedule recurring events
+        await rescheduleRecurringEmails();
       }
     } catch (err) {
       console.error('Supabase email preferences error:', err);
@@ -2758,7 +2844,7 @@ const WindingPathApp = () => {
 
   // Monitor week transitions and handle state resets
   useEffect(() => {
-    if (currentWeek !== lastWeekViewed) {
+    if (currentWeek !== lastWeekViewed && lastWeekViewed > 0) {
       console.log(`📅 Week transition: ${lastWeekViewed} → ${currentWeek}`);
 
       // Reset daily progress for new week
@@ -2768,9 +2854,14 @@ const WindingPathApp = () => {
       // Sync landscape to current week
       setLandscapeActiveLayer(Math.max(1, currentWeek));
 
+      // Schedule week transition email (only if user has email and it's a real transition, not initial load)
+      if (supabaseUserId && userEmail && lastWeekViewed > 0) {
+        scheduleWeekTransitionEmail(lastWeekViewed, currentWeek);
+      }
+
       setLastWeekViewed(currentWeek);
     }
-  }, [currentWeek, lastWeekViewed]);
+  }, [currentWeek, lastWeekViewed, supabaseUserId, userEmail]);
 
   // Periodic sync to Supabase - every 5 minutes when app is active
   useEffect(() => {
@@ -2940,8 +3031,8 @@ const WindingPathApp = () => {
       await storageSet('windingPath:delayFirstCheckIn', true);
     }
 
-    // Create/update Supabase user if email was provided
-    if (emailOptIn && userEmail.trim() && supabaseRef.current) {
+    // Create/update Supabase user - always create if email provided (for account restoration)
+    if (userEmail.trim() && supabaseRef.current) {
       const startDate = await storageGet('windingPath:startDate') || new Date().toISOString().split('T')[0];
       const user = await getOrCreateSupabaseUser(
         userEmail.trim(),
@@ -2954,14 +3045,12 @@ const WindingPathApp = () => {
         setSupabaseUserId(user.id);
         console.log('Supabase user created:', user.id);
 
-        // Schedule initial email events if reminders are enabled
+        // Schedule welcome email
+        await scheduleWelcomeEmail();
+
+        // Schedule initial recurring email events if reminders are enabled
         if (emailRemindersEnabled) {
-          await updateEmailPreferences({
-            emailRemindersEnabled,
-            dailyReminders,
-            weeklyGreetings,
-            checkInReminders
-          });
+          await rescheduleRecurringEmails();
         }
       }
     }
@@ -4333,6 +4422,7 @@ const WindingPathApp = () => {
                       saveToSupabase={saveWeeklyPromptToSupabase}
                       archiveData={archiveData}
                       setArchiveData={setArchiveData}
+                      scheduleFutureLetter={scheduleFutureLetterEmail}
                     />
                   );
                 }
@@ -7003,8 +7093,11 @@ Help us to create as an act of worship to you.`}
                   <h3 style={{ fontFamily: 'Helvetica, Arial, sans-serif', color: '#030f42', fontSize: '15px', marginBottom: '12px' }}>
                     Account Email
                   </h3>
-                  <p style={{ fontFamily: 'Helvetica, Arial, sans-serif', color: '#030f42', fontSize: '13px', marginBottom: '12px', opacity: 0.7 }}>
+                  <p style={{ fontFamily: 'Helvetica, Arial, sans-serif', color: '#030f42', fontSize: '13px', marginBottom: '8px', opacity: 0.7 }}>
                     Your email is used to restore your account on new devices.
+                  </p>
+                  <p style={{ fontFamily: 'Helvetica, Arial, sans-serif', color: '#030f42', fontSize: '12px', marginBottom: '12px', opacity: 0.6, fontStyle: 'italic' }}>
+                    This is the one way to make sure your data is saved.
                   </p>
                   {userEmail ? (
                     <div>
