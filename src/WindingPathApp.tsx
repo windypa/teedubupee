@@ -1684,6 +1684,10 @@ const WindingPathApp = () => {
   const [currentPage, setCurrentPage] = useState('path');
   const [showResetConfirm, setShowResetConfirm] = useState(false);
   const [showAboutInfo, setShowAboutInfo] = useState(false);
+  const [showRestoreAccount, setShowRestoreAccount] = useState(false);
+  const [restoreEmail, setRestoreEmail] = useState('');
+  const [restoreError, setRestoreError] = useState('');
+  const [restoreLoading, setRestoreLoading] = useState(false);
 
   // Supabase client ref (initialized once in useEffect)
   const supabaseRef = useRef(null);
@@ -1981,11 +1985,14 @@ const WindingPathApp = () => {
   const getOrCreateSupabaseUser = async (email, name, signature, checkInDayValue, startDate) => {
     if (!supabaseRef.current || !email) return null;
 
+    // Normalize email to lowercase
+    const normalizedEmail = email.trim().toLowerCase();
+
     try {
       // Upload signature to storage and get URL
       let signatureUrl = signature;
       if (signature && signature.startsWith('data:')) {
-        const uploadedUrl = await uploadSignatureToStorage(signature, email);
+        const uploadedUrl = await uploadSignatureToStorage(signature, normalizedEmail);
         if (uploadedUrl) {
           signatureUrl = uploadedUrl;
         }
@@ -1995,7 +2002,7 @@ const WindingPathApp = () => {
       const { data: existingUser, error: findError } = await supabaseRef.current
         .from('users')
         .select('*')
-        .eq('email', email)
+        .eq('email', normalizedEmail)
         .single();
 
       if (existingUser) {
@@ -2020,7 +2027,7 @@ const WindingPathApp = () => {
       const { data: newUser, error: createError } = await supabaseRef.current
         .from('users')
         .insert({
-          email: email,
+          email: normalizedEmail,
           name: name,
           signature: signatureUrl,
           check_in_day: checkInDayValue,
@@ -2177,6 +2184,52 @@ const WindingPathApp = () => {
     }
   };
 
+  // Restore account by email - for returning users on new device/cleared storage
+  const restoreAccountByEmail = async (email) => {
+    if (!supabaseRef.current || !email) {
+      return { success: false, error: 'Please enter a valid email address' };
+    }
+
+    try {
+      const { data: user, error } = await supabaseRef.current
+        .from('users')
+        .select('*')
+        .eq('email', email.trim().toLowerCase())
+        .single();
+
+      if (error || !user) {
+        return { success: false, error: 'No account found with this email address' };
+      }
+
+      // Restore user data to localStorage
+      await storageSet('windingPath:userName', user.name);
+      await storageSet('windingPath:userEmail', user.email);
+      await storageSet('windingPath:userSignature', user.signature);
+      await storageSet('windingPath:checkInDay', user.check_in_day);
+      await storageSet('windingPath:startDate', user.start_date);
+      await storageSet('windingPath:emailOptIn', true);
+
+      // Set state
+      setUserName(user.name);
+      setUserEmail(user.email);
+      setUserSignature(user.signature);
+      setCheckInDay(user.check_in_day);
+      setSupabaseUserId(user.id);
+
+      // Load archive data
+      const supabaseArchive = await loadArchiveFromSupabase(user.id);
+      if (supabaseArchive && Object.keys(supabaseArchive).length > 0) {
+        setArchiveData(supabaseArchive);
+      }
+
+      console.log('Account restored successfully for:', user.name);
+      return { success: true, user };
+    } catch (err) {
+      console.error('Error restoring account:', err);
+      return { success: false, error: 'An error occurred. Please try again.' };
+    }
+  };
+
   // Load archive data from Supabase for returning users
   const loadArchiveFromSupabase = async (userId) => {
     if (!supabaseRef.current || !userId) return null;
@@ -2252,6 +2305,46 @@ const WindingPathApp = () => {
     } catch (err) {
       console.error('Error loading archive from Supabase:', err);
       return null;
+    }
+  };
+
+  // Sync all user data to Supabase - called periodically and on important actions
+  const syncUserDataToSupabase = async () => {
+    if (!supabaseRef.current || !supabaseUserId) {
+      console.log('Sync skipped: no Supabase connection or user ID');
+      return;
+    }
+
+    try {
+      // Update user record
+      const { error: userError } = await supabaseRef.current
+        .from('users')
+        .update({
+          name: userName,
+          signature: userSignature,
+          check_in_day: checkInDay,
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', supabaseUserId);
+
+      if (userError) {
+        console.error('Error syncing user data:', userError);
+      } else {
+        console.log('✅ User data synced to Supabase');
+      }
+
+      // Sync landscape responses
+      if (landscapeResponses && Object.keys(landscapeResponses).length > 0) {
+        for (const [key, value] of Object.entries(landscapeResponses)) {
+          if (value && typeof value === 'string' && value.trim()) {
+            await saveLandscapeResponseToSupabase(key, value);
+          }
+        }
+      }
+
+      console.log('✅ Full sync completed');
+    } catch (err) {
+      console.error('Sync error:', err);
     }
   };
 
@@ -2679,6 +2772,33 @@ const WindingPathApp = () => {
     }
   }, [currentWeek, lastWeekViewed]);
 
+  // Periodic sync to Supabase - every 5 minutes when app is active
+  useEffect(() => {
+    if (appState !== 'main' || !supabaseUserId) return;
+
+    // Initial sync after 30 seconds
+    const initialSync = setTimeout(() => {
+      syncUserDataToSupabase();
+    }, 30000);
+
+    // Periodic sync every 5 minutes
+    const periodicSync = setInterval(() => {
+      syncUserDataToSupabase();
+    }, 5 * 60 * 1000);
+
+    // Sync when user leaves page
+    const handleBeforeUnload = () => {
+      syncUserDataToSupabase();
+    };
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
+    return () => {
+      clearTimeout(initialSync);
+      clearInterval(periodicSync);
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, [appState, supabaseUserId]);
+
   // Autosave page entry with debounce - also saves to archive
   useEffect(() => {
     if (appState !== 'main') return;
@@ -2793,8 +2913,9 @@ const WindingPathApp = () => {
     if (userSignature) {
       await storageSet('windingPath:userSignature', userSignature);
       await storageSet('windingPath:emailOptIn', emailOptIn);
-      if (emailOptIn && userEmail.trim()) {
-        await storageSet('windingPath:userEmail', userEmail.trim());
+      // Always save email if provided (used for account restoration)
+      if (userEmail.trim()) {
+        await storageSet('windingPath:userEmail', userEmail.trim().toLowerCase());
       }
       setAppState('onboarding-checkin');
     }
@@ -3188,7 +3309,7 @@ const WindingPathApp = () => {
           </h1>
           <button
             onClick={handleBegin}
-            className="px-12 py-4 text-xl transition-all hover:opacity-80 fade-in-delay-1 mb-12"
+            className="px-12 py-4 text-xl transition-all hover:opacity-80 fade-in-delay-1 mb-6"
             style={{
               fontFamily: 'Helvetica, Arial, sans-serif',
               backgroundColor: '#030f42',
@@ -3197,6 +3318,15 @@ const WindingPathApp = () => {
           >
             begin
           </button>
+          <div className="fade-in-delay-1 mb-12">
+            <button
+              onClick={() => setShowRestoreAccount(true)}
+              className="text-sm hover:opacity-70 transition-all"
+              style={{ fontFamily: 'Helvetica, Arial, sans-serif', color: '#030f42', textDecoration: 'underline', background: 'none', border: 'none', cursor: 'pointer' }}
+            >
+              already have an account?
+            </button>
+          </div>
           {splashQuote && (
             <p
               className="text-base fade-in-delay-2"
@@ -3206,6 +3336,86 @@ const WindingPathApp = () => {
             </p>
           )}
         </div>
+
+        {/* Restore Account Modal */}
+        {showRestoreAccount && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+            <div className="bg-white border max-w-md w-full p-8" style={{ borderColor: '#030f42' }}>
+              <h2
+                className="text-xl font-bold mb-4"
+                style={{ fontFamily: 'Helvetica, Arial, sans-serif', color: '#030f42' }}
+              >
+                restore your account
+              </h2>
+              <p className="mb-6" style={{ fontFamily: 'Helvetica, Arial, sans-serif', color: '#030f42', fontSize: '14px', opacity: 0.7 }}>
+                Enter the email address you used when you signed up.
+              </p>
+              
+              <input
+                type="email"
+                value={restoreEmail}
+                onChange={(e) => {
+                  setRestoreEmail(e.target.value);
+                  setRestoreError('');
+                }}
+                placeholder="your@email.com"
+                className="w-full px-4 py-3 border mb-4"
+                style={{
+                  fontFamily: 'Helvetica, Arial, sans-serif',
+                  borderColor: '#030f42',
+                  color: '#030f42',
+                  fontSize: '16px'
+                }}
+              />
+              
+              {restoreError && (
+                <p className="mb-4" style={{ fontFamily: 'Helvetica, Arial, sans-serif', color: '#dc2626', fontSize: '14px' }}>
+                  {restoreError}
+                </p>
+              )}
+
+              <div className="flex gap-3">
+                <button
+                  onClick={() => {
+                    setShowRestoreAccount(false);
+                    setRestoreEmail('');
+                    setRestoreError('');
+                  }}
+                  className="flex-1 px-4 py-3 border hover:opacity-70 transition-all"
+                  style={{
+                    fontFamily: 'Helvetica, Arial, sans-serif',
+                    borderColor: '#030f42',
+                    color: '#030f42'
+                  }}
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={async () => {
+                    setRestoreLoading(true);
+                    const result = await restoreAccountByEmail(restoreEmail);
+                    setRestoreLoading(false);
+                    if (result.success) {
+                      setShowRestoreAccount(false);
+                      setRestoreEmail('');
+                      setAppState('welcome-back');
+                    } else {
+                      setRestoreError(result.error);
+                    }
+                  }}
+                  disabled={restoreLoading || !restoreEmail.trim()}
+                  className="flex-1 px-4 py-3 text-white hover:opacity-80 transition-all disabled:opacity-50"
+                  style={{
+                    fontFamily: 'Helvetica, Arial, sans-serif',
+                    backgroundColor: '#030f42'
+                  }}
+                >
+                  {restoreLoading ? 'Restoring...' : 'Restore'}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     );
   }
@@ -6788,6 +6998,76 @@ Help us to create as an act of worship to you.`}
                 user profile
               </h2>
               <div className="space-y-6">
+                {/* Account Email */}
+                <div className="border p-6" style={{ borderColor: '#030f42' }}>
+                  <h3 style={{ fontFamily: 'Helvetica, Arial, sans-serif', color: '#030f42', fontSize: '15px', marginBottom: '12px' }}>
+                    Account Email
+                  </h3>
+                  <p style={{ fontFamily: 'Helvetica, Arial, sans-serif', color: '#030f42', fontSize: '13px', marginBottom: '12px', opacity: 0.7 }}>
+                    Your email is used to restore your account on new devices.
+                  </p>
+                  {userEmail ? (
+                    <div>
+                      <p style={{ fontFamily: 'Helvetica, Arial, sans-serif', color: '#030f42', fontSize: '14px', marginBottom: '8px' }}>
+                        Current email: <span style={{ fontWeight: 'bold' }}>{userEmail}</span>
+                      </p>
+                      <button
+                        onClick={async () => {
+                          const newEmail = prompt('Enter new email address:', userEmail);
+                          if (newEmail && newEmail.trim() && newEmail !== userEmail) {
+                            const trimmedEmail = newEmail.trim().toLowerCase();
+                            setUserEmail(trimmedEmail);
+                            await storageSet('windingPath:userEmail', trimmedEmail);
+                            // Update in Supabase if connected
+                            if (supabaseRef.current && supabaseUserId) {
+                              await supabaseRef.current
+                                .from('users')
+                                .update({ email: trimmedEmail })
+                                .eq('id', supabaseUserId);
+                            }
+                            alert('Email updated successfully!');
+                          }
+                        }}
+                        className="text-sm hover:opacity-70 transition-all"
+                        style={{ fontFamily: 'Helvetica, Arial, sans-serif', color: '#030f42', textDecoration: 'underline', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
+                      >
+                        change email
+                      </button>
+                    </div>
+                  ) : (
+                    <div>
+                      <p style={{ fontFamily: 'Helvetica, Arial, sans-serif', color: '#dc2626', fontSize: '13px', marginBottom: '12px' }}>
+                        ⚠️ No email linked. Add one to protect your data.
+                      </p>
+                      <button
+                        onClick={async () => {
+                          const newEmail = prompt('Enter your email address:');
+                          if (newEmail && newEmail.trim()) {
+                            const trimmedEmail = newEmail.trim().toLowerCase();
+                            setUserEmail(trimmedEmail);
+                            await storageSet('windingPath:userEmail', trimmedEmail);
+                            // Create/update user in Supabase
+                            if (supabaseRef.current) {
+                              const startDate = await storageGet('windingPath:startDate') || new Date().toISOString().split('T')[0];
+                              await getOrCreateSupabaseUser(trimmedEmail, userName, userSignature, checkInDay, startDate);
+                            }
+                            alert('Email added successfully! Your account is now protected.');
+                          }
+                        }}
+                        className="px-4 py-2 border hover:opacity-70 transition-all"
+                        style={{
+                          fontFamily: 'Helvetica, Arial, sans-serif',
+                          borderColor: '#030f42',
+                          color: '#030f42',
+                          fontSize: '14px'
+                        }}
+                      >
+                        Add Email
+                      </button>
+                    </div>
+                  )}
+                </div>
+
                 {/* Notification Settings */}
                 <div className="border p-6" style={{ borderColor: '#030f42' }}>
                   <div className="flex items-center justify-between mb-4">
