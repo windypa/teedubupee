@@ -1705,6 +1705,7 @@ const WindingPathApp = () => {
   const [appState, setAppState] = useState('loading');
   const [currentPage, setCurrentPage] = useState('path');
   const [showResetConfirm, setShowResetConfirm] = useState(false);
+  const [showAboutInfo, setShowAboutInfo] = useState(false);
 
   // Supabase client ref (initialized once in useEffect)
   const supabaseRef = useRef(null);
@@ -7017,6 +7018,22 @@ Help us to create as an act of worship to you.`}
 
                   </div>
                 </div>
+
+                {/* About + Info Button */}
+                <div className="border p-6" style={{ borderColor: '#030f42' }}>
+                  <button
+                    onClick={() => setShowAboutInfo(true)}
+                    className="w-full px-4 py-3 border text-center hover:opacity-70 transition-all"
+                    style={{
+                      fontFamily: 'Helvetica, Arial, sans-serif',
+                      borderColor: '#030f42',
+                      color: '#030f42',
+                      fontSize: '14px'
+                    }}
+                  >
+                    about + info
+                  </button>
+                </div>
               </div>
             </div>
           )}
@@ -7063,6 +7080,58 @@ Help us to create as an act of worship to you.`}
                   Delete
                 </button>
               </div>
+            </div>
+          </div>
+        )}
+
+        {/* About + Info Modal */}
+        {showAboutInfo && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+            <div className="bg-white border max-w-lg w-full p-8" style={{ borderColor: '#030f42' }}>
+              <h2
+                className="text-xl font-bold mb-6"
+                style={{ fontFamily: 'Helvetica, Arial, sans-serif', color: '#030f42' }}
+              >
+                about + info
+              </h2>
+
+              <div style={{ fontFamily: 'Helvetica, Arial, sans-serif', color: '#030f42', fontSize: '14px', lineHeight: '1.7' }}>
+                <p className="mb-4">
+                  The Winding Path was created in the last days of 2025. The code is written by someone who is not quite a professional, but who wanted to adapt a popular self help method to her digital native ways.
+                </p>
+                <p className="mb-4">
+                  If you encounter any challenges, or want to say hi, please reach out to{' '}
+                  <a 
+                    href="mailto:hello@winding-path.net" 
+                    style={{ textDecoration: 'underline', color: '#030f42' }}
+                  >
+                    hello@winding-path.net
+                  </a>.
+                </p>
+                <p className="mb-6">
+                  As of January 1, 2026, The Winding Path costs $50 to host and run every month. If you appreciate the resource and want to help keep the lights on, your donation would be appreciated:{' '}
+                  <a 
+                    href="https://ko-fi.com/thewindingpath" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    style={{ textDecoration: 'underline', color: '#030f42' }}
+                  >
+                    ko-fi.com/thewindingpath
+                  </a>.
+                </p>
+              </div>
+
+              <button
+                onClick={() => setShowAboutInfo(false)}
+                className="w-full px-4 py-3 border hover:opacity-70 transition-all"
+                style={{
+                  fontFamily: 'Helvetica, Arial, sans-serif',
+                  borderColor: '#030f42',
+                  color: '#030f42'
+                }}
+              >
+                Close
+              </button>
             </div>
           </div>
         )}
